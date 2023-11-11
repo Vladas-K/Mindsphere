@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} {{title}} {% endblock %}
+  {% block content %}
+      <!--<h1> <span style="color:red">Di</span>event</h1> <br>-->
+      <h1 style="color: red;">Dievent</h1> <br> 
+      <h2>Проведение мероприятий</h2>
+    
+      {% for event in page_obj %}
+        <ul>
+          <li>
+            Мероприятие: {{ event.name }}
+          </li>
+          <li>
+            Дата публикации: {{ event.pub_date|date:"d E Y" }}
+          </li>
+        </ul>
+        <p>{{ event.description }}</p>    
+        <a href="">подробнее</a><br>
+        {% if event.category %}        
+          <a href="{% url 'events:category_events' event.category.slug %}">все корпоративы</a>
+        {% endif %} 
+        {% if not forloop.last %}<hr>{% endif %}
+      {% endfor %}
+      {% include 'events/includes/paginator.html' %}
+
+
+  {% endblock %}
+
+ 
