@@ -1,0 +1,39 @@
+
+{% extends 'base.html' %}
+{% load thumbnail %}
+{% block title %} Event - {{ object.name|truncatechars:30 }}{% endblock %}
+{% block content %}
+<body>
+    <main>
+        <div class="row">
+            <aside class="col-12 col-md-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Дата публикации: {{ object.pub_date|date:"d E Y" }}
+                    </li>
+                    {% if object.category %}
+                    <li class="list-group-item">
+                        {% if event.category %}        
+                        <a href="{{ event.category.get_absolute_url }}" 
+                        {% if not forloop.last %}style="margin-bottom: 20px;"{% endif %}>все корпоративы</a>
+                        {% endif %} 
+                    </li>
+                    {% endif %}
+                </ul>
+            </aside>
+            <article class="col-12 col-md-9">
+                {% thumbnail object.image "960x339" crop="center" upscale=True as im %}
+                <img class="card-img my-2" src="{{ im.url }}">
+                {% endthumbnail %}
+                <p>
+                    {{ object.description }} 
+                </p>
+                <p style="color: red;">
+                  {{ object.category.slug}}
+                </p>
+            </article>
+        </div> 
+    </main>
+</body>
+</html>
+{% endblock %}

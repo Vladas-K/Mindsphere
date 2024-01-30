@@ -1,41 +1,52 @@
+from typing import Any
 from django.core.paginator import Paginator
+from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from datetime import datetime
 from .models import Event, Category
+from django.views.generic.base import TemplateView
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
 
 pub_date = datetime.now()
 
-def index(request):
-    event_list = Event.objects.all().order_by('-pub_date')
-    paginator = Paginator(event_list, 2)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    template = 'events/index.html'
-    title = 'Dievent'
-    pub_date = datetime.now()
-    data = {'title': title, 
-            'pub_date': pub_date, 
-            'page_obj': page_obj,}
-    return render(request, template, data)
 
-def category_events(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    event_list = Event.objects.filter(category=category).order_by('-pub_date')
-    paginator = Paginator(event_list, 2)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    data = {'category': category,
-            'page_obj': page_obj,}
-    template = 'events/category_events.html'
-    return render(request, template, data)
+class EventListView(ListView):
+    model = Event
+    paginate_by = 2
+    template_name = 'events/index.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Dievent'
+        return context
+    
+    
+class CategoryListView(ListView):
+    model = Event
+    paginate_by = 2
+    template_name = 'events/category_events.html'
 
-def event_detail_id(request, event_id):
-    template = 'events/event_detail_id.html'
-    data = {'event_id': event_id, 'pub_date': pub_date}
-    return render(request, template, data)
+    def get_category(self):
+        return get_object_or_404(Category, slug=self.kwargs['cat_slug'])
 
-def event_detail(request, slug):
-    template = 'events/event_detail.html'
-    data = {'slug': slug, 'pub_date': pub_date}
-    return render(request, template, data)
+    def get_queryset(self):
+        category = self.get_category()
+        # queryset = Event.objects.filter(category=category).order_by('-pub_date')
+        queryset = Event.objects.filter(category__slug=self.kwargs['cat_slug'])#.select_related('category')
+        print(Event.objects.filter(category__slug=self.kwargs['cat_slug']).select_related('category'))
+        a = self
+        print(f'Значение кваргов - {a}')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = self.get_category()
+        context['category'] = get_object_or_404(Category, slug=self.kwargs['cat_slug'])
+        return context  
+        
+ 
+class EventDetailView(DetailView):
+    template_name = 'events/event_detail_1.html'
+    model = Event
+

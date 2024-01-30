@@ -16,7 +16,7 @@
             </li>
           </ul>
           <p>{{ event.description }}</p>
-          <a href="">подробнее</a>
+          <a href="{{ event.get_absolute_url }}">подробнее</a> <br>
           {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}
         {% include 'events/includes/paginator.html' %}

@@ -7,6 +7,7 @@ User = get_user_model()
 
 class Event(models.Model):
     name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
     description = models.TextField(max_length=400)
     pub_date = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
@@ -26,7 +27,8 @@ class Event(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("events:event_detail_id", kwargs={"event_id": self.pk})
+        print('печать')
+        return reverse('events:event_detail', kwargs={"slug": self.slug})
     
     
 
@@ -36,3 +38,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('events:category_events', kwargs={"cat_slug": self.slug})
