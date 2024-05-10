@@ -16,6 +16,10 @@ class EventListView(ListView):
     model = Event
     paginate_by = 2
     template_name = 'events/index.html'
+
+    def get_queryset(self):
+        return Event.objects.order_by('-pub_date')
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Dievent'
@@ -33,7 +37,6 @@ class CategoryListView(ListView):
     def get_queryset(self):
         category = self.get_category()
         queryset = Event.objects.filter(category=category).order_by('-pub_date')
-        # queryset = Event.objects.filter(category__slug=self.kwargs['cat_slug'])#.select_related('category')
         return queryset
 
     def get_context_data(self, **kwargs):
