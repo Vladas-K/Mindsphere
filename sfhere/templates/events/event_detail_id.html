@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 {% load thumbnail %}
-  {% block content %}
-    <h1 style="color: red;">Dievent</h1> <br> 
-    <h2>Событие id:{{object.pk}}</h2>
-    <p>{{ object.description }}</p> 
-    <div class="col-3">
-      {% thumbnail event.image "400x380" crop="center" upscale=True as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-      {% endthumbnail %}
+{% block content %}
+  <h1 class="text-center" style="color: red;">Dievent</h1> <br>
+  <div class="row">
+    <div class="col-md-2"></div> <!-- Оставляем пустым для отступа -->
+    <div class="col-md-8"> <!-- Занимает две трети макета -->
+      {% thumbnail event.image  "960x539" crop="center" upscale=True as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="mx-auto d-block"> <!-- Выравнивание по центру -->
+      {% endthumbnail %} <br>
     </div>
-  {% endblock %}
+    <div class="col-md-2"></div> <!-- Оставляем пустым для отступа -->
+  </div>
+  <h2 class="text-center">{{object.name}}</h2>
+  <p>{{ object.description }}</p> 
+{% endblock %}
+
   
