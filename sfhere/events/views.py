@@ -2,12 +2,14 @@ from typing import Any
 from django.core.paginator import Paginator
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect ,render, get_object_or_404
 from datetime import datetime
 from .models import Event, Category
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+
+from .forms import EventForm
 
 pub_date = datetime.now()
 
@@ -49,4 +51,17 @@ class CategoryListView(ListView):
 class EventDetailView(DetailView):
     template_name = 'events/event_detail_id.html'
     model = Event
+
+def event_create(request):
+    form = EventForm(
+        request.POST or None,
+    )
+
+    # if form.is_valid():
+    #     post = form.save(False)
+    #     post.author = request.user
+    #     post.save()
+    #     return redirect('posts:profile', request.user.username)
+
+    return render(request, 'events/event_create.html', {'form': form, })
 
