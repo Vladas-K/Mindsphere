@@ -17,12 +17,12 @@
           {% if is_edit %}
             Редактировать запись
           {% else %}
-            Новый пост
+            Новое событие
           {% endif %}
         </div>
         <div class="card-body">
           {% include 'events/includes/form_error.html' %}
-          <form method="post" action="{% url 'events:event_create' %}">
+          <form method="post" enctype="multipart/form-data" action="{% url 'events:event_create' %}">
             {% include 'events/includes/form_field.html' %}
             <div class="d-flex justify-content-end">
               <button class="btn btn-primary" type="submit">

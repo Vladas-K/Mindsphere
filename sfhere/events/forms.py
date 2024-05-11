@@ -7,14 +7,19 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
 
-        fields = ('text', 'group', )
         fields = ['name', 'slug', 'description', 'category', 'image']
-        # labels = {
-        #     'text': 'Введите текст',
-        #     'group': 'Выберите группу'
-        # }
+        labels = {
+            'name': 'Название',
+            'slug': 'Slug',
+            'description': 'Описание',
+            'category': 'Категория',
+            'image': 'Изображение'
+        }
 
-        # help_texts = {
-        #     'text': 'Текст нового поста',
-        #     'group': 'Группа, к которой будет относиться пост',
-        # }
+        help_texts = {
+            'name': 'Введите название мероприятия',
+            'slug': 'Введите название мероприятия латинскими буквами',
+            'description': 'Введите описание мероприятия',
+            'category': 'Выберите категорию',
+            'image': 'Загрузите изображение'
+        }

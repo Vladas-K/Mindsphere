@@ -53,15 +53,22 @@ class EventDetailView(DetailView):
     model = Event
 
 def event_create(request):
-    form = EventForm(
-        request.POST or None,
-    )
+    # form = EventForm(
+    #     request.POST or None,
+    # )
 
-    # if form.is_valid():
-    #     post = form.save(False)
-    #     post.author = request.user
-    #     post.save()
-    #     return redirect('posts:profile', request.user.username)
+    if request.method == 'POST':
+    
+        form = EventForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            post = form.save(False)
+            post.author = request.user
+            post.save()
+            return redirect('events:index')
+    
+    else:
+        form = EventForm()
 
     return render(request, 'events/event_create.html', {'form': form, })
 
