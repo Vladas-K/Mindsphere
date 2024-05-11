@@ -53,9 +53,6 @@ class EventDetailView(DetailView):
     model = Event
 
 def event_create(request):
-    # form = EventForm(
-    #     request.POST or None,
-    # )
 
     if request.method == 'POST':
     

@@ -22,13 +22,15 @@
       <ul class="nav nav-pills">
         <li class="nav-item"> 
           
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<!--  -->"><span style="color: black;">Технологии</span></a>
-        </li>
         {% if user.is_authenticated %}
-        <li class="nav-item"> 
+        {% comment %} <li class="nav-item"> 
           <a class="nav-link" href="<!--  -->"><span style="color: black;">Новая запись</span></a>
+        </li> {% endcomment %}
+        <li class="nav-item">
+          <a class="nav-link link-light {% if view_name  == 'events:event_create' %}active{% endif %}"
+             href="{% url 'events:event_create' %}">
+          Новая запись
+          </a> 
         </li>
         <li class="nav-item"> 
           <a class="nav-link link-light" href="{% url 'password_change' %}">Изменить пароль</a>
@@ -44,8 +46,9 @@
           <a class="nav-link link-light" href="{% url 'users:login' %}">Войти</a>
         </li>
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="<!--  -->">Регистрация</a>
+          <a class="nav-link link-light" href="{% url 'users:signup' %}">Регистрация</a>
         </li>
+        
         {% endif %}
       </ul>
       </div>
