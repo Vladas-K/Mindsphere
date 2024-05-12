@@ -1,15 +1,12 @@
-from typing import Any
-from django.core.paginator import Paginator
-from django.db.models.query import QuerySet
-from django.http import HttpResponse
-from django.shortcuts import redirect ,render, get_object_or_404
 from datetime import datetime
-from .models import Event, Category
-from django.views.generic.base import TemplateView
-from django.views.generic import ListView
-from django.views.generic.detail import DetailView
+
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.views.generic import DetailView, ListView
+from django.views.generic.edit import CreateView, UpdateView
 
 from .forms import EventForm
+from .models import Category, Event
 
 pub_date = datetime.now()
 
@@ -30,7 +27,7 @@ class EventListView(ListView):
     
 class CategoryListView(ListView):
     model = Event
-    paginate_by = 2
+    paginate_by = 5
     template_name = 'events/category_events.html'
 
     def get_category(self):
@@ -51,38 +48,25 @@ class CategoryListView(ListView):
 class EventDetailView(DetailView):
     template_name = 'events/event_detail_id.html'
     model = Event
-
-def event_create(request):
-
-    if request.method == 'POST':
     
-        form = EventForm(request.POST, request.FILES)
 
-        if form.is_valid():
-            post = form.save(False)
-            post.author = request.user
-            post.save()
-            return redirect('events:index')
+class EventCreateView(CreateView):
+    template_name = 'events/event_create.html'
+    form_class = EventForm
+
+    def get_success_url(self):
+        return reverse('events:index')
     
-    else:
-        form = EventForm()
+    
+class EventUpdateView(UpdateView):
+    model = Event
+    template_name = 'events/event_create.html'
+    form_class = EventForm
 
-    return render(request, 'events/event_create.html', {'form': form, })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_edit'] = True
+        return context
 
-def event_edit(request, slug):
-    event = get_object_or_404(Event, slug=slug)
-    form = EventForm(
-        request.POST or None,
-        instance=event,
-    )
-
-    if form.is_valid():
-        form.save()
-        return redirect('events:event_detail', slug=event.slug)
-
-    context = {
-        'event': event,
-        'form': form,
-        'is_edit': True,
-    }
-    return render(request, 'events/event_create.html', context)
+    def get_success_url(self):
+        return reverse('events:index')
