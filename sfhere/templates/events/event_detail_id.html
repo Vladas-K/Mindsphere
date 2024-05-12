@@ -13,6 +13,10 @@
   </div>
   <h2 class="text-center">{{object.name}}</h2>
   <p>{{ object.description }}</p> 
+  <a button
+              type="submit"
+              class="btn btn-primary"
+              href="{% url 'events:event_edit' event.slug %}">Редактировать запись</a>
 {% endblock %}
 
   

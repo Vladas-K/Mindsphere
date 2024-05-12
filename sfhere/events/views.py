@@ -16,7 +16,7 @@ pub_date = datetime.now()
 
 class EventListView(ListView):
     model = Event
-    paginate_by = 2
+    paginate_by = 5
     template_name = 'events/index.html'
 
     def get_queryset(self):
@@ -69,3 +69,20 @@ def event_create(request):
 
     return render(request, 'events/event_create.html', {'form': form, })
 
+def event_edit(request, slug):
+    event = get_object_or_404(Event, slug=slug)
+    form = EventForm(
+        request.POST or None,
+        instance=event,
+    )
+
+    if form.is_valid():
+        form.save()
+        return redirect('events:event_detail', slug=event.slug)
+
+    context = {
+        'event': event,
+        'form': form,
+        'is_edit': True,
+    }
+    return render(request, 'events/event_create.html', context)

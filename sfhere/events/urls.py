@@ -11,4 +11,5 @@ urlpatterns = [
     path('events/<slug:slug>/', EventDetailView.as_view(), name='event_detail'),
     path("about/", TemplateView.as_view(template_name='events/about.html')),
     path('create/', views.event_create, name='event_create'),
+    path('events/<slug:slug>/edit/', views.event_edit, name='event_edit'),
 ]
