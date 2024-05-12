@@ -1,6 +1,5 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from events import views
 from events.views import (CategoryListView, EventCreateView, EventDetailView,
                           EventListView, EventUpdateView)
 
