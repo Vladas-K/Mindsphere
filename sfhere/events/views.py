@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -50,7 +51,7 @@ class EventDetailView(DetailView):
     model = Event
     
 
-class EventCreateView(CreateView):
+class EventCreateView(LoginRequiredMixin, CreateView):
     template_name = 'events/event_create.html'
     form_class = EventForm
 
@@ -58,7 +59,7 @@ class EventCreateView(CreateView):
         return reverse('events:index')
     
     
-class EventUpdateView(UpdateView):
+class EventUpdateView(LoginRequiredMixin, UpdateView):
     model = Event
     template_name = 'events/event_create.html'
     form_class = EventForm
