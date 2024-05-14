@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import EventForm
 from .models import Category, Event
@@ -71,3 +71,14 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('events:index')
+    
+
+class EventDeleteView(LoginRequiredMixin, DeleteView):
+    model = Event
+    template_name = 'events/event_confirm_delete.html'
+    success_url = reverse_lazy('events:index')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_delete'] = True
+        return context

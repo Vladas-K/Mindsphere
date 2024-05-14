@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
-from events.views import (CategoryListView, EventCreateView, EventDetailView,
-                          EventListView, EventUpdateView)
+from events.views import (CategoryListView, EventCreateView, EventDeleteView,
+                          EventDetailView, EventListView, EventUpdateView)
 
 app_name = 'events'
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path("about/", TemplateView.as_view(template_name='events/about.html')),
     path('create/', EventCreateView.as_view(), name='event_create'),
     path('events/<slug:slug>/edit/', EventUpdateView.as_view(), name='event_edit'),
+    path('events/<slug:slug>/delete/', EventDeleteView.as_view(), name='event_delete'), 
 ]

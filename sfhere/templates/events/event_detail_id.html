@@ -16,7 +16,13 @@
   <a button
               type="submit"
               class="btn btn-primary"
-              href="{% url 'events:event_edit' event.slug %}">Редактировать запись</a>
+              href="{% url 'events:event_edit' event.slug %}">Редактировать запись</a> 
+              <br>
+              <br>
+  <a button
+              type="submit"
+              class="btn btn-primary"
+              href="{% url 'events:event_delete' event.slug %}">Удалить запись</a>
 {% endblock %}
 
   
