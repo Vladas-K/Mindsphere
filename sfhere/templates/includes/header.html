@@ -1,7 +1,8 @@
 {% load static %}
+{% comment %} <head>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
+</head> {% endcomment %}
 <header>
-    <!-- Использованы классы бустрапа для создания типовой навигации с логотипом -->
-    <!-- В дальнейшем тут будет создано полноценное меню -->
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: grey">
       <div class="container">
         <a class="navbar-brand" href="{% url 'events:index' %}">
@@ -14,24 +15,17 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-
-      {% comment %}
-      Меню - список пунктов со стандартными классами Bootsrap.
-      Класс nav-pills нужен для выделения активных пунктов 
-      {% endcomment %}
       <ul class="nav nav-pills">
-        <li class="nav-item"> 
-          
+        <li class="nav-item">           
         {% if user.is_authenticated %}
-        {% comment %} <li class="nav-item"> 
-          <a class="nav-link" href="<!--  -->"><span style="color: black;">Новая запись</span></a>
-        </li> {% endcomment %}
+        {% with request.resolver_match.view_name as view_name %}  
         <li class="nav-item">
           <a class="nav-link link-light {% if view_name  == 'events:event_create' %}active{% endif %}"
              href="{% url 'events:event_create' %}">
           Новая запись
           </a> 
         </li>
+        {% endwith %} 
         <li class="nav-item"> 
           <a class="nav-link link-light" href="{% url 'password_change' %}">Изменить пароль</a>
         </li>
@@ -47,8 +41,7 @@
         </li>
         <li class="nav-item"> 
           <a class="nav-link link-light" href="{% url 'users:signup' %}">Регистрация</a>
-        </li>
-        
+        </li>        
         {% endif %}
       </ul>
       </div>
