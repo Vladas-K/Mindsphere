@@ -25,23 +25,29 @@
           Новая запись
           </a> 
         </li>
-        {% endwith %} 
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'password_change' %}">Изменить пароль</a>
+          <a class="nav-link link-light {% if view_name  == 'users:password_change' %}active{% endif %}" 
+            href="{% url 'users:password_change' %}">Изменить пароль</a>
         </li>
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'users:logout' %}">Выйти</a>
+          <a class="nav-link link-light {% if view_name  == 'users:logout' %}active{% endif %}" 
+            href="{% url 'users:logout' %}">Выйти</a>
         </li>
         <li>
           Пользователь: {{ user.username }}
         </li>
+        {% endwith %}
         {% else %}
+        {% with request.resolver_match.view_name as view_name %}  
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'users:login' %}">Войти</a>
+          <a class="nav-link link-light {% if view_name  == 'users:login' %}active{% endif %}"
+            href="{% url 'users:login' %}">Войти</a>
         </li>
         <li class="nav-item"> 
-          <a class="nav-link link-light" href="{% url 'users:signup' %}">Регистрация</a>
-        </li>        
+          <a class="nav-link link-light {% if view_name  == 'users:signup' %}active{% endif %}"
+            href="{% url 'users:signup' %}">Регистрация</a>
+        </li>
+        {% endwith %}    
         {% endif %}
       </ul>
       </div>
