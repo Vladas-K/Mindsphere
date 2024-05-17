@@ -1,14 +1,9 @@
 {% load static %}
-{% comment %} <head>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}">
-</head> {% endcomment %}
 <header>
     <nav class="navbar navbar-light navbar-expand-lg" style="background-color: grey">
       <div class="container">
         <a class="navbar-brand" href="{% url 'events:index' %}">
           <img src="{% static 'img/logo1.png' %}" width="30" height="40" class="d-inline-block align-top" alt="">
-          <!-- тег span используется для добавления нужных стилей отдельным участкам текста -->
-          <!-- <span style="color:black">Di</span>event -->
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,9 +28,10 @@
           <a class="nav-link link-light {% if view_name  == 'users:logout' %}active{% endif %}" 
             href="{% url 'users:logout' %}">Выйти</a>
         </li>
-        <li>
-          Пользователь: {{ user.username }}
-        </li>
+        <li> 
+          <span class="nav-link" style="color: black;">
+            {{ user.username }}
+          </span>
         {% endwith %}
         {% else %}
         {% with request.resolver_match.view_name as view_name %}  
@@ -43,10 +39,10 @@
           <a class="nav-link link-light {% if view_name  == 'users:login' %}active{% endif %}"
             href="{% url 'users:login' %}">Войти</a>
         </li>
-        <li class="nav-item"> 
+        {% comment %} <li class="nav-item"> 
           <a class="nav-link link-light {% if view_name  == 'users:signup' %}active{% endif %}"
             href="{% url 'users:signup' %}">Регистрация</a>
-        </li>
+        </li> {% endcomment %}
         {% endwith %}    
         {% endif %}
       </ul>
