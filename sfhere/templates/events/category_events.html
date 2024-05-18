@@ -1,21 +1,31 @@
 {% extends 'base.html' %}
+{% load thumbnail %}
 {% block title %}{{ category.name }}{% endblock %}
 <main>
   {% block content %}
     <!-- класс py-5 создает отступы сверху и снизу блока -->
-    <div class="container py-1">
-      <h1>{{ category.name }}</h1>
+    <div class="container py-2">
+      <h1 style="color: red;">{{ category.name }}</h1>
       <article>
         {% for event in page_obj %}
           <ul>
             <li>
               Мероприятие: {{ event.name }}
             </li>
-            <li>
+            {% comment %} <li>
               Дата публикации: {{ event.pub_date|date:"d E Y" }}
-            </li>
+            </li> {% endcomment %}
           </ul>
-          <p>{{ event.description }}</p>
+          <div class="row">
+            <div class="col-6">
+              {% thumbnail event.image "400x380" crop="center" upscale=True as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+              {% endthumbnail %}
+            </div>
+            <div class="col-6">
+              <p>{{ event.description }}</p> 
+            </div>
+          </div>
           <a href="{{ event.get_absolute_url }}">подробнее</a> <br>
           {% if not forloop.last %}<hr>{% endif %}
         {% endfor %}
@@ -24,4 +34,4 @@
       <!-- под последним постом нет линии -->
     </div>
   {% endblock %}
-</main>  
+</main>
