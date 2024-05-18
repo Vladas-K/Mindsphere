@@ -1,18 +1,13 @@
-# users/urls.py
-
-# Импортируем из приложения django.contrib.auth нужный view-класс
-from django.contrib.auth.views import LogoutView, LoginView, PasswordChangeView, PasswordChangeDoneView
+from django.contrib.auth.views import (LogoutView, LoginView,
+                                       PasswordChangeView,
+                                       PasswordChangeDoneView)
 from django.urls import path
-from . import views
 
 app_name = 'users'
 
 urlpatterns = [
     path(
       'logout/',
-      # Прямо в описании обработчика укажем шаблон, 
-      # который должен применяться для отображения возвращаемой страницы.
-      # Да, во view-классах так можно! Как их не полюбить.
       LogoutView.as_view(template_name='users/logged_out.html'),
       name='logout'
     ),
@@ -22,12 +17,10 @@ urlpatterns = [
         LoginView.as_view(template_name='users/login.html'),
         name='login'
     ),
-    path('password_change/', 
+    path('password_change/',
         PasswordChangeView.as_view(template_name='users/password_change_form1.html'),
         name='password_change'),
     path('password_change/done/',
         PasswordChangeDoneView.as_view(template_name='users/password_change_done.html'),
         name='password_change_done'),
 ]
-# template_name='users/password_change_form.html'
-# template_name='users/password_change_done.html'
