@@ -22,7 +22,7 @@ urlpatterns = [
     path('', include('events.urls')),
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
-    path('auth/', include('django.contrib.auth.urls')), 
+    path('auth/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:

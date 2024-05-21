@@ -19,13 +19,13 @@ class EventListView(ListView):
 
     def get_queryset(self):
         return Event.objects.order_by('-pub_date')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = 'Dievent'
         return context
-    
-    
+
+
 class CategoryListView(ListView):
     model = Event
     paginate_by = 5
@@ -43,13 +43,13 @@ class CategoryListView(ListView):
         context = super().get_context_data(**kwargs)
         category = self.get_category()
         context['category'] = category
-        return context  
-        
- 
+        return context
+
+
 class EventDetailView(DetailView):
     template_name = 'events/event_detail_id.html'
     model = Event
-    
+
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     template_name = 'events/event_create.html'
@@ -57,8 +57,8 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('events:index')
-    
-    
+
+
 class EventUpdateView(LoginRequiredMixin, UpdateView):
     model = Event
     template_name = 'events/event_create.html'
@@ -71,7 +71,7 @@ class EventUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('events:index')
-    
+
 
 class EventDeleteView(LoginRequiredMixin, DeleteView):
     model = Event
