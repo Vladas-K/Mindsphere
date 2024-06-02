@@ -6,7 +6,7 @@
     <div class="col-md-2"></div> <!-- Оставляем пустым для отступа -->
     <div class="col-md-8"> <!-- Занимает две трети макета -->
       {% thumbnail event.image  "960x539" crop="center" upscale=True as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="mx-auto d-block"> <!-- Выравнивание по центру -->
+        <img src="{{ im.url }}" class="img-fluid mx-auto d-block"> <!-- Выравнивание по центру -->
       {% endthumbnail %} <br>
     </div>
     <div class="col-md-2"></div> <!-- Оставляем пустым для отступа -->
@@ -24,5 +24,3 @@
               class="btn btn-primary"
               href="{% url 'events:event_delete' event.slug %}">Удалить запись</a>
 {% endblock %}
-
-  
