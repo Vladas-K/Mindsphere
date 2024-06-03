@@ -17,13 +17,13 @@
             </li> {% endcomment %}
           </ul>
           <div class="row">
-            <div class="col-6">
-              {% thumbnail event.image "400x380" crop="center" upscale=True as im %}
-                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-              {% endthumbnail %}
+            <div class="col-12 col-md-6 col-xl-3">
+              {% thumbnail event.image  "960x539" crop="center" upscale=True as im %}
+                <img src="{{ im.url }}" class="img-fluid mx-auto d-block">
+              {% endthumbnail %} <br>
             </div>
-            <div class="col-6">
-              <p>{{ event.description }}</p> 
+            <div class="col-12 col-md-6 col-xl-9">
+              <p>{{ event.description|truncatewords:40 }}</p>
             </div>
           </div>
           <a href="{{ event.get_absolute_url }}">подробнее</a> <br>
@@ -31,7 +31,6 @@
         {% endfor %}
         {% include 'events/includes/paginator.html' %}
       </article>
-      <!-- под последним постом нет линии -->
     </div>
   {% endblock %}
 </main>
