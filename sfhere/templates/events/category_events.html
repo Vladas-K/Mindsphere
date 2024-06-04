@@ -4,7 +4,6 @@
 <main>
   {% block content %}
     <!-- класс py-5 создает отступы сверху и снизу блока -->
-    <div class="container py-2">
       <h1 style="color: red;">{{ category.name }}</h1>
       <article>
         {% for event in page_obj %}
@@ -12,9 +11,9 @@
             <li>
               Мероприятие: {{ event.name }}
             </li>
-            {% comment %} <li>
+            <li>
               Дата публикации: {{ event.pub_date|date:"d E Y" }}
-            </li> {% endcomment %}
+            </li>
           </ul>
           <div class="row">
             <div class="col-12 col-md-6 col-xl-3">
