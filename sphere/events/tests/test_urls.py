@@ -2,6 +2,8 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 
+from http import HTTPStatus
+
 from events.models import Event, Category
 
 User = get_user_model()
@@ -30,20 +32,20 @@ class StaticURLTests(TestCase):
 
     def test_homepage(self):
         response = self.guest_client.get('/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_about(self):
         response = self.guest_client.get('/about/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_create(self):
         response = self.authorized_client.get('/create/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_event_detail(self):
         response = self.guest_client.get('/events/test-slug/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_event_category(self):
         response = self.guest_client.get('/category/test-slug-category/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
