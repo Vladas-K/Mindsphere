@@ -6,16 +6,16 @@ User = get_user_model()
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
-    description = models.TextField(max_length=400)
-    pub_date = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=200, verbose_name='Название')
+    slug = models.SlugField(max_length=200, unique=True, verbose_name='Слаг')
+    description = models.TextField(max_length=400, verbose_name='Описание')
+    pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     category = models.ForeignKey(
         'Category',
         blank=True,
         null=True,
         on_delete=models.SET_NULL,
-        related_name='cats'
+        related_name='cats', verbose_name='Категория'
     )
     image = models.ImageField(
         'Картинка',
@@ -23,11 +23,9 @@ class Event(models.Model):
         blank=True
     )
 
-
     class Meta:
         verbose_name = 'мероприятие'
         verbose_name_plural = 'Мероприятия'
-
 
     def __str__(self):
         return self.name
@@ -37,14 +35,12 @@ class Event(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
-
+    name = models.CharField(max_length=200, verbose_name='Название')
+    slug = models.SlugField(unique=True, verbose_name='Слаг')
 
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
-
 
     def __str__(self):
         return self.name

@@ -6,7 +6,7 @@ from .models import Category, Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'slug', 'description', 'pub_date', 'category', 'image_thumbnail')
+    list_display = ('name', 'slug', 'description', 'pub_date', 'category', 'image_thumbnail')
     search_fields = ('description',)
     empty_value_display = '-пусто-'
     list_filter = ('pub_date', 'category')
@@ -20,14 +20,7 @@ class EventAdmin(admin.ModelAdmin):
 
     image_thumbnail.short_description = 'Изображение'
 
-# @admin.register(Event)
-# class EventAdmin(admin.ModelAdmin):
-#     list_display = ('pk', 'name', 'description', 'pub_date', 'category')
-#     search_fields = ('description',)
-#     empty_value_display = '-пусто-'
-#     list_filter = ('pub_date', 'category')
-
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'slug')
+    list_display = ('name', 'slug')
