@@ -23,6 +23,12 @@ class Event(models.Model):
         blank=True
     )
 
+
+    class Meta:
+        verbose_name = 'мероприятие'
+        verbose_name_plural = 'Мероприятия'
+
+
     def __str__(self):
         return self.name
 
@@ -33,6 +39,12 @@ class Event(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
+
+
+    class Meta:
+        verbose_name = 'категория'
+        verbose_name_plural = 'Категории'
+
 
     def __str__(self):
         return self.name
