@@ -24,7 +24,7 @@ class Event(models.Model):
     )
 
     class Meta:
-        verbose_name = 'мероприятие'
+        verbose_name = 'объект «Мероприятие»'
         verbose_name_plural = 'Мероприятия'
 
     def __str__(self):
@@ -39,7 +39,7 @@ class Category(models.Model):
     slug = models.SlugField(unique=True, verbose_name='Слаг')
 
     class Meta:
-        verbose_name = 'категория'
+        verbose_name = 'объект «Категория»'
         verbose_name_plural = 'Категории'
 
     def __str__(self):
