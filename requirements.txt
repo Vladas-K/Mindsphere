@@ -1,7 +1,9 @@
 asgiref==3.7.2
-Django==3.2.3
+Django==4.2.15
 django-extensions==3.2.3
+django_debug_toolbar==3.8.1
 flake8==7.0.0
+flake8-import-order==0.18.2
 mccabe==0.7.0
 Pillow==10.0.1
 pycodestyle==2.11.1
@@ -10,3 +12,4 @@ pytz==2023.3
 sorl-thumbnail==12.10.0
 sqlparse==0.4.4
 typing_extensions==4.7.1
+tzdata==2024.1
