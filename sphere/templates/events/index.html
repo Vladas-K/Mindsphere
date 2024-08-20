@@ -21,7 +21,7 @@
       <a href="{{ event.get_absolute_url }}">подробнее</a><br>
       {% if event.category %}
         <a href="{{ event.category.get_absolute_url }}"
-           {% if not forloop.last %}style="margin-bottom: 20px;"{% endif %}>все корпоративы</a>
+           {% if not forloop.last %}style="margin-bottom: 20px;"{% endif %}>все {{ event.category | lower}}</a>
       {% endif %}
       {% if not forloop.last %}
         <hr>
