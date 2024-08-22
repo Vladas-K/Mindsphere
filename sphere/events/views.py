@@ -18,7 +18,7 @@ class EventListView(ListView):
     template_name = 'events/index.html'
 
     def get_queryset(self):
-        return Event.objects.order_by('-pub_date').select_related('category')
+        return Event.objects.select_related('category').order_by('-pub_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,19 +30,20 @@ class CategoryListView(ListView):
     model = Event
     paginate_by = 5
     template_name = 'events/category_events.html'
-
+    
     def get_category(self):
-        return get_object_or_404(Category, slug=self.kwargs['cat_slug'])
+        if not hasattr(self, 'category'):
+            self.category = get_object_or_404(Category, slug=self.kwargs['cat_slug'])
+        return self.category
 
     def get_queryset(self):
         category = self.get_category()
-        queryset = Event.objects.filter(category=category).order_by('-pub_date')
+        queryset = Event.objects.filter(category=category).select_related('category').order_by('-pub_date')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        category = self.get_category()
-        context['category'] = category
+        context['category'] = self.get_category()
         return context
 
 
