@@ -52,26 +52,25 @@ class EventDetailView(DetailView):
     model = Event
 
 
-class EventCreateView(LoginRequiredMixin, CreateView):
+class EventMixin(LoginRequiredMixin):
+    model = Event
     template_name = 'events/event_create.html'
     form_class = EventForm
 
     def get_success_url(self):
-        return reverse('events:index')
+        return reverse_lazy('events:index')
 
 
-class EventUpdateView(LoginRequiredMixin, UpdateView):
-    model = Event
-    template_name = 'events/event_create.html'
-    form_class = EventForm
+class EventCreateView(EventMixin, CreateView):
+    pass
+
+
+class EventUpdateView(EventMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_edit'] = True
         return context
-
-    def get_success_url(self):
-        return reverse('events:index')
 
 
 class EventDeleteView(LoginRequiredMixin, DeleteView):
