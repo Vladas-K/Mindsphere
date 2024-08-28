@@ -3,13 +3,13 @@
 {% block content %}
   <h1 class="text-center" style="color: red;">Dievent</h1> <br>
   <div class="row">
-    <div class="col-md-2"></div> <!-- Оставляем пустым для отступа -->
-    <div class="col-md-8"> <!-- Занимает две трети макета -->
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
       {% thumbnail event.image  "960x539" crop="center" upscale=True as im %}
         <img src="{{ im.url }}" class="img-fluid mx-auto d-block"> <!-- Выравнивание по центру -->
       {% endthumbnail %} <br>
     </div>
-    <div class="col-md-2"></div> <!-- Оставляем пустым для отступа -->
+    <div class="col-md-2"></div>
   </div>
   <h2 class="text-center">{{object.name}}</h2>
   <p>{{ object.description }}</p> 

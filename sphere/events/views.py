@@ -48,7 +48,6 @@ class CategoryListView(ListView):
 
 
 class EventDetailView(DetailView):
-    template_name = 'events/event_detail_id.html'
     model = Event
 
 
