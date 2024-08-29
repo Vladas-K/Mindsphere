@@ -5,7 +5,7 @@ django_debug_toolbar==3.8.1
 flake8==7.0.0
 flake8-import-order==0.18.2
 mccabe==0.7.0
-Pillow==10.0.1
+pillow==10.4.0
 pycodestyle==2.11.1
 pyflakes==3.2.0
 pytz==2023.3
