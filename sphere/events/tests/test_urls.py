@@ -1,6 +1,7 @@
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
+from django.urls import reverse
 
 from http import HTTPStatus
 
@@ -14,38 +15,41 @@ class StaticURLTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        category = Category.objects.create(name='Тестовая категория',
+        cls.category = Category.objects.create(name='Тестовая категория',
                                 slug='test-slug-category')
-        Event.objects.create(
+        cls.event = Event.objects.create(
             name='Тестовый заголовок',
             description='Тестовый текст',
             slug='test-slug',
-            category=category,
+            category=cls.category,
         )
  
     def setUp(self):
-        self.guest_client = Client()
         self.user = User.objects.create_user(username='HasNoName')
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
-
-    def test_homepage(self):
-        response = self.guest_client.get('/')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_about(self):
-        response = self.guest_client.get('/about/')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_create(self):
-        response = self.authorized_client.get('/create/')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_event_detail(self):
-        response = self.guest_client.get('/events/test-slug/')
+    def test_index(self):
+        url = reverse('events:index',)
+        response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_event_category(self):
-        response = self.guest_client.get('/category/test-slug-category/')
+        url = reverse('events:category_events', args=(self.category.slug,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)    
+
+    def test_about(self):
+        url = reverse('events:about',)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_create(self):
+        url = reverse('events:event_create',)
+        response = self.authorized_client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_event_detail(self):
+        url = reverse('events:event_detail', args=(self.event.slug,))
+        response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
