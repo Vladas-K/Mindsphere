@@ -11,6 +11,6 @@ pycodestyle==2.11.1
 pyflakes==3.2.0
 pytz==2023.3
 sorl-thumbnail==12.10.0
-sqlparse==0.4.4
+sqlparse==0.5.0
 typing_extensions==4.7.1
 tzdata==2024.1
