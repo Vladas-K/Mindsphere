@@ -29,27 +29,22 @@ class StaticURLTests(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
-    def test_index(self):
-        url = reverse('events:index',)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_event_category(self):
-        url = reverse('events:category_events', args=(self.category.slug,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTPStatus.OK)    
-
-    def test_about(self):
-        url = reverse('events:about',)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
     def test_create(self):
         url = reverse('events:event_create',)
         response = self.authorized_client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-    def test_event_detail(self):
-        url = reverse('events:event_detail', args=(self.event.slug,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
+    def test_pages_availability(self):
+        urls = (
+            ('events:index', None),
+            ('events:about', None),
+            ('users:login', None),
+            ('users:logout', None),
+            ('events:event_detail', (self.event.slug,)),
+            ('events:category_events', (self.category.slug,)),
+        )
+        for name, args in urls:
+            with self.subTest(name=name):
+                url = reverse(name, args=args)
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
