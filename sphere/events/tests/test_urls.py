@@ -25,6 +25,7 @@ class StaticURLTests(TestCase):
         )
  
     def setUp(self):
+        self.guest_client = Client()
         self.user = User.objects.create_user(username='HasNoName')
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
@@ -46,5 +47,5 @@ class StaticURLTests(TestCase):
         for name, args in urls:
             with self.subTest(name=name):
                 url = reverse(name, args=args)
-                response = self.client.get(url)
+                response = self.guest_client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
