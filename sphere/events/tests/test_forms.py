@@ -59,8 +59,9 @@ class EventCreateFormTests(TestCase):
         response = self.authorized_client.post(
             reverse('events:event_create'), data=form_data, follow=True
         )
+        event = Event.objects.get()
+        
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        event = Event.objects.last()
         self.assertEqual(event.name, 'Тестовое название')
         self.assertEqual(event.category, self.category)
         self.assertEqual(str(event.image), 'events/small.gif')
