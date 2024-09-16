@@ -63,6 +63,6 @@ class EventCreateFormTests(TestCase):
         
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(event.name, 'Тестовое название')
-        self.assertEqual(event.category, self.category)
+        self.assertEqual(event.category.name, 'Тестовая категория')
         self.assertEqual(str(event.image), 'events/small.gif')
         self.assertEqual(Event.objects.count(), 1)
