@@ -20,3 +20,9 @@ def event(category):
         category=category
     )
     return event
+
+
+@pytest.fixture
+def user(django_user_model):
+    user = django_user_model.objects.create(username='HasNoName')
+    return user

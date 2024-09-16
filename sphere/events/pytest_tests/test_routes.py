@@ -25,9 +25,8 @@ def test_pages_availability_for_anonymous_user(client, name, kwargs, event, cate
     'name',
      ['events:event_create']
 )
-def test_pages_availability_for_auth_user(client, django_user_model, name):
+def test_pages_availability_for_auth_user(client, user, name):
     url = reverse(name)
-    user = django_user_model.objects.create(username='HasNoName')
     client.force_login(user)
     response = client.get(url)
     assert response.status_code == HTTPStatus.OK
