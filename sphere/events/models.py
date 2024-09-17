@@ -1,13 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from pytils.translit import slugify
 
 User = get_user_model()
 
 
 class Event(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
-    slug = models.SlugField(max_length=200, unique=True, verbose_name='Слаг')
+    slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name='Слаг')
     description = models.TextField(max_length=400, verbose_name='Описание')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     category = models.ForeignKey(
@@ -32,6 +33,12 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('events:event_detail', kwargs={"slug": self.slug})
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            max_slug_length = self._meta.get_field('slug').max_length
+            self.slug = slugify(self.name)[:max_slug_length]
+        super().save(*args, **kwargs)
 
 
 class Category(models.Model):
