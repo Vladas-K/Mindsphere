@@ -43,7 +43,7 @@ class Event(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
-    slug = models.SlugField(unique=True, verbose_name='Слаг')
+    slug = models.SlugField(unique=True, blank=True, verbose_name='Слаг')
 
     class Meta:
         verbose_name = 'объект «Категория»'
@@ -54,3 +54,9 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse('events:category_events', kwargs={"cat_slug": self.slug})
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            max_slug_length = self._meta.get_field('slug').max_length
+            self.slug = slugify(self.name)[:max_slug_length]
+        super().save(*args, **kwargs)
