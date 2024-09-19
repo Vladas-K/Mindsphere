@@ -5,19 +5,22 @@ from http import HTTPStatus
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'name, kwargs',
+    'name, kwargs, method',
     [
-        ('events:index', None),
-        ('events:about', None),
-        ('users:login', None),
-        ('users:logout', None),
-        ('events:event_detail', {'slug': 'example-slug'}),
-        ('events:category_events', {'cat_slug': 'example-slug'})
+        ('events:index', None, 'get'),
+        ('events:about', None, 'get'),
+        ('users:login', None, 'get'),
+        ('users:logout', None, 'post'),
+        ('events:event_detail', {'slug': 'example-slug'}, 'get'),
+        ('events:category_events', {'cat_slug': 'example-slug'}, 'get')
     ]
 )
-def test_pages_availability_for_anonymous_user(client, name, kwargs, event, category):
+def test_pages_availability_for_anonymous_user(client, name, kwargs, method, event, category):
     url = reverse(name, kwargs=kwargs)
-    response = client.get(url)
+    if method == 'get':
+        response = client.get(url)
+    else:
+        response = client.post(url)
     assert response.status_code == HTTPStatus.OK
 
 
