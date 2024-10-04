@@ -9,7 +9,7 @@ User = get_user_model()
 class Event(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name='Слаг')
-    description = models.TextField(max_length=400, verbose_name='Описание')
+    description = models.TextField(max_length=1000, verbose_name='Описание')
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     category = models.ForeignKey(
         'Category',
