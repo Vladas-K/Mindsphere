@@ -12,7 +12,7 @@
     <div class="col-md-2"></div>
   </div>
   <h2 class="text-center">{{object.name}}</h2>
-  <p>{{ object.description }}</p>
+  <p>{{ event.description|linebreaksbr }}</p>
   {% if user.is_authenticated %} 
     <a button
                 type="submit"
