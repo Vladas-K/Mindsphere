@@ -1,53 +1,17 @@
-{% load static %}
-<header>
-    <nav class="navbar navbar-light navbar-expand-lg" style="background-color: grey">
-      <div class="container">
-        <a class="navbar-brand" href="{% url 'events:index' %}">
-          <img src="{% static 'img/logo1.png' %}" width="30" height="40" class="d-inline-block align-top" alt="">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="nav nav-pills">
-        <li class="nav-item">           
-        {% if user.is_authenticated %}
-        {% with request.resolver_match.view_name as view_name %}  
-        <li class="nav-item">
-          <a class="nav-link link-light {% if view_name  == 'events:event_create' %}active{% endif %}"
-             href="{% url 'events:event_create' %}">
-          Новая запись
-          </a> 
-        </li>
-        <li class="nav-item"> 
-          <a class="nav-link link-light {% if view_name  == 'users:password_change' %}active{% endif %}" 
-            href="{% url 'users:password_change' %}">Изменить пароль</a>
-        </li>
-        <li class="nav-item">
-          <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit" class="nav-link link-light btn btn-link">Выйти</button>
-          </form>
-        </li>
-        <li> 
-          <span class="nav-link" style="color: black;">
-            {{ user.username }}
-          </span>
-        {% endwith %}
-        {% else %}
-        {% with request.resolver_match.view_name as view_name %}  
-        <li class="nav-item"> 
-          <a class="nav-link link-light {% if view_name  == 'users:login' %}active{% endif %}"
-            href="{% url 'users:login' %}">Войти</a>
-        </li>
-        {% comment %} <li class="nav-item"> 
-          <a class="nav-link link-light {% if view_name  == 'users:signup' %}active{% endif %}"
-            href="{% url 'users:signup' %}">Регистрация</a>
-        </li> {% endcomment %}
-        {% endwith %}    
-        {% endif %}
-      </ul>
-      </div>
-    </nav>      
+{% if user.is_authenticated %}
+<header class="staff-bar">
+  <div class="staff-bar__inner">
+    <a class="staff-bar__brand" href="{% url 'events:index' %}" aria-label="DI EVENT — каталог">DI EVENT<span aria-hidden="true"> / </span><span>{% if user.is_authenticated %}Рабочий раздел{% else %}Каталог{% endif %}</span></a>
+    <nav class="staff-bar__nav" aria-label="{% if user.is_authenticated %}Меню сотрудника{% else %}Вход сотрудников{% endif %}">
+      {% if user.is_authenticated %}
+        <span class="staff-bar__name" title="{{ user.get_full_name|default:user.username }}">{{ user.get_full_name|default:user.username }}</span>
+        <a href="{% url 'events:event_create' %}">Добавить программу</a>
+        <a href="{% url 'users:password_change' %}">Изменить пароль</a>
+        <form method="post" action="{% url 'users:logout' %}">
+          {% csrf_token %}<button type="submit">Выйти</button>
+        </form>
+      {% endif %}
+    </nav>
+  </div>
 </header>
+{% endif %}

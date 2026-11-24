@@ -151,3 +151,10 @@ LOGIN_REDIRECT_URL = 'events:index'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# The client-facing catalog must match the PDF, including in local development.
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'core.debug.show_toolbar',
+    # The callback delegates to the default implementation and respects DEBUG=False.
+    'IS_RUNNING_TESTS': False,
+}

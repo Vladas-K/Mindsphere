@@ -1,0 +1,28 @@
+{% load l10n %}
+{% with event=program.event %}
+<article class="pdf-page program-sheet" id="program-{{ event.pk }}" aria-labelledby="program-title-{{ event.pk }}">
+  {% include 'events/includes/mobile_program.html' %}
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" aria-labelledby="program-title-{{ event.pk }}">
+    <title id="program-title-{{ event.pk }}">{{ event.name }}</title>
+    <defs>
+      <clipPath id="program-art-{{ event.pk }}" clipPathUnits="objectBoundingBox">
+        <rect class="pdf-image-clip" width="1" height="1" />
+      </clipPath>
+    </defs>
+    {% include program.graphics_template %}
+    <g class="pdf-text">
+      {% for run in program.runs %}
+        <text{% if run.css_class %} class="{{ run.css_class }}"{% endif %} x="{{ run.x|unlocalize }}" y="{{ run.y|unlocalize }}" font-size="{{ run.size|unlocalize }}" font-weight="{{ run.weight }}" fill="{{ run.fill }}">{{ run.text }}</text>
+      {% endfor %}
+    </g>
+    <a class="program-footer-link" href="#catalog" aria-label="К списку программ"><circle cx="599" cy="632" r="20" fill="transparent"/></a>
+    <a class="program-footer-link" href="https://www.dievent.ru/" aria-label="Сайт DI EVENT"><rect x="40" y="615" width="150" height="28" fill="transparent"/></a>
+  </svg>
+  {% if user.is_authenticated %}
+    <div class="employee-actions">
+      {% if not detail %}<a href="{{ event.get_absolute_url }}">Подробнее</a>{% endif %}
+      <a href="{% url 'events:event_edit' event.slug %}">Редактировать</a>
+    </div>
+  {% endif %}
+</article>
+{% endwith %}

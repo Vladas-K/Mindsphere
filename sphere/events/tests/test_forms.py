@@ -2,7 +2,6 @@ import shutil
 import tempfile
 from http import HTTPStatus
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
@@ -11,28 +10,26 @@ from events.models import Event, Category
 
 User = get_user_model()
 
-TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 
 class EventCreateFormTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.media_root = tempfile.mkdtemp(prefix='mindsphere-test-')
+        cls.addClassCleanup(shutil.rmtree, cls.media_root, ignore_errors=True)
+        media_settings = override_settings(MEDIA_ROOT=cls.media_root)
+        media_settings.enable()
+        cls.addClassCleanup(media_settings.disable)
         cls.user = User.objects.create_user(username='HasNoName')
         cls.category = Category.objects.create(name='Тестовая категория',
                                 slug='test-slug-category')
-
-    @classmethod
-    def tearDownClass(cls):
-        super().tearDownClass()
-        shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
     def setUp(self):
         self.guest_client = Client()
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
-    @override_settings(MEDIA_ROOT=(TEMP_MEDIA_ROOT + '/media'))
     def test_create_event(self):
         """Валидная форма создает запись в Event."""
         small_gif = (

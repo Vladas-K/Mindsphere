@@ -160,8 +160,13 @@ cython_debug/
 #.idea/
 .vscode/
 
-static/
+# Generated assets only; source static files must be tracked.
+/sphere/static_collected/
+.DS_Store
 
 media/
 
 old_views.py
+
+# Local agent instructions
+/AGENTS.md

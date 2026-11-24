@@ -1,71 +1,42 @@
-{% extends "base.html" %}
-{% block title %}Войти{% endblock %}
-{% block content %}
-{% load user_filters %}
-  <div class="row justify-content-center">
-    <div class="col-md-8 p-5">
-      <div class="card">
-        <div class="card-header">
-          Войти на сайт
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Вход для сотрудников — DI EVENT{% endblock %}
+{% block body_class %}staff-auth{% endblock %}
+{% block framework_styles %}{% endblock %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'users/staff.css' %}?v=20261122-save-button">
+<script src="{% static 'users/login.js' %}" defer></script>
+{% endblock %}
+{% block page %}
+<section class="auth-layout" aria-labelledby="login-title">
+  <div class="auth-card">
+    <a class="auth-logo" href="{% url 'events:index' %}" aria-label="DI EVENT — каталог"><img src="{% static 'events/logo.png' %}" alt="DI EVENT" width="46" height="60"></a>
+    <p class="auth-eyebrow">Рабочий раздел DI EVENT</p>
+    <h1 id="login-title">Вход для<br>сотрудников</h1>
+    <p class="auth-intro">Управление программами и материалы команды.</p>
+    {% if form.errors %}
+      <div class="auth-error" role="alert" id="login-error">Не удалось войти. Проверьте логин и пароль.</div>
+    {% endif %}
+    <form method="post" action="{% url 'users:login' %}" class="auth-form">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <div class="auth-field">
+        <label for="id_username">Логин</label>
+        <input type="text" name="username" id="id_username" value="{{ form.username.value|default_if_none:'' }}" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="150" required autofocus {% if form.errors %}aria-invalid="true" aria-describedby="login-error"{% endif %}>
+      </div>
+      <div class="auth-field">
+        <label for="id_password">Пароль</label>
+        <div class="auth-password">
+          <input type="password" name="password" id="id_password" autocomplete="current-password" required {% if form.errors %}aria-invalid="true" aria-describedby="login-error"{% endif %}>
+          <button class="password-toggle" type="button" aria-controls="id_password" aria-pressed="false" hidden>Показать</button>
         </div>
-        <div class="card-body">
-          {% if form.errors %}
-              {% for field in form %}
-                {% for error in field.errors %}            
-                  <div class="alert alert-danger">
-                    {{ error|escape }}
-                  </div>
-                {% endfor %}
-              {% endfor %}
-              {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                  {{ error|escape }}
-                </div>
-              {% endfor %}
-          {% endif %}
-
-          <form method="post"
-            {% if action_url %}
-              action="{% url action_url %}"
-            {% endif %}
-          >
-          {% csrf_token %}
-
-          {% for field in form %}
-            <div class="form-group row my-3"
-              {% if field.field.required %} 
-                aria-required="true"
-              {% else %}
-                aria-required="false"
-              {% endif %}
-            >
-              <label for="{{ field.id_for_label }}">
-                {{ field.label }}
-                  {% if field.field.required %}
-                    <span class="required text-danger">*</span>
-                  {% endif %}
-              </label>
-              <div>
-              {{ field|addclass:'form-control' }}
-                {% if field.help_text %}
-                  <small id="{{ field.id_for_label }}-help" class="form-text text-muted">
-                    {{ field.help_text|safe }}
-                  </small>
-                {% endif %}
-              </div>
-            </div>
-          {% endfor %}
-          <div class="col-md-6">
-            <button type="submit" class="btn btn-primary">
-              Войти
-            </button>
-            {% comment %} <a href="{% url 'password_reset' %}" class="btn btn-link">
-              Забыли пароль?
-            </a> {% endcomment %}
-          </div>
-          </form>
-        </div> <!-- card body -->
-      </div> <!-- card -->
-    </div> <!-- col -->
-</div> <!-- row -->
+      </div>
+      <button class="auth-submit" type="submit">Войти <span aria-hidden="true">↗</span></button>
+    </form>
+    <a class="auth-back" href="{% url 'events:index' %}"><span aria-hidden="true">←</span> Вернуться в каталог</a>
+  </div>
+  <p class="auth-signature">DI EVENT <span aria-hidden="true">·</span> {{ year }}</p>
+</section>
 {% endblock %}

@@ -40,8 +40,6 @@ class StaticURLTests(TestCase):
             ('events:index', None),
             ('events:about', None),
             ('users:login', None),
-            ('users:logout', None),
-            ('events:event_detail', (self.event.slug,)),
             ('events:category_events', (self.category.slug,)),
         )
         for name, args in urls:
@@ -49,3 +47,13 @@ class StaticURLTests(TestCase):
                 url = reverse(name, args=args)
                 response = self.guest_client.get(url)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_logout_uses_post(self):
+        response = self.authorized_client.post(reverse('users:logout'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_detail_requires_login(self):
+        url = self.event.get_absolute_url()
+        response = self.guest_client.get(url)
+        self.assertRedirects(response, reverse('users:login') + '?next=' + url)
+        self.assertEqual(self.authorized_client.get(url).status_code, HTTPStatus.OK)

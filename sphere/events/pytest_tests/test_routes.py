@@ -11,7 +11,6 @@ from http import HTTPStatus
         ('events:about', None, 'get'),
         ('users:login', None, 'get'),
         ('users:logout', None, 'post'),
-        ('events:event_detail', {'slug': 'example-slug'}, 'get'),
         ('events:category_events', {'cat_slug': 'example-slug'}, 'get')
     ]
 )
@@ -39,6 +38,7 @@ def test_pages_availability_for_auth_user(client, user, name):
 @pytest.mark.parametrize(
     'name, kwargs',
     [
+        ('events:event_detail', {'slug': 'example-slug'}),
         ('events:event_create', None),
         ('events:event_delete', {'slug': 'example-slug'}),
         ('events:event_edit', {'slug': 'example-slug'}),

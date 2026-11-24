@@ -4,7 +4,7 @@ from events.models import Event, Category
 
 
 @pytest.fixture
-def category():
+def category(db):
     category = Category.objects.create(
         name='example category', 
         slug='example-slug'
@@ -24,7 +24,7 @@ def event(category):
 
 
 @pytest.fixture
-def user(django_user_model):
+def user(db, django_user_model):
     user = django_user_model.objects.create(username='HasNoName')
     return user
 
@@ -53,3 +53,7 @@ def form_data(category):
             'image': uploaded,
         }
     return form_data
+
+@pytest.fixture(autouse=True)
+def isolated_media(settings, tmp_path):
+    settings.MEDIA_ROOT = tmp_path / 'media'

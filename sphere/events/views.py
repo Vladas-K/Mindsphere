@@ -1,36 +1,34 @@
-from datetime import datetime
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .forms import EventForm
 from .models import Category, Event
-
-pub_date = datetime.now()
+from .catalog import prepare_program
 
 
 class EventListView(ListView):
     model = Event
-    paginate_by = 5
     template_name = 'events/index.html'
 
     def get_queryset(self):
-        return Event.objects.select_related('category').order_by('-pub_date')
+        return Event.objects.filter(is_published=True).select_related('category').defer('description')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = 'Dievent'
+        context['title'] = 'Авторские программы'
+        events = list(context['event_list'])
+        context['programs'] = [
+            prepare_program(event, number, len(events))
+            for number, event in enumerate(events, 1)
+        ]
         return context
 
 
-class CategoryListView(ListView):
-    model = Event
-    paginate_by = 5
-    template_name = 'events/category_events.html'
-    
+class CategoryListView(EventListView):
+
     def get_category(self):
         if not hasattr(self, 'category'):
             self.category = get_object_or_404(Category, slug=self.kwargs['cat_slug'])
@@ -38,17 +36,22 @@ class CategoryListView(ListView):
 
     def get_queryset(self):
         category = self.get_category()
-        queryset = Event.objects.filter(category=category).select_related('category').order_by('-pub_date')
-        return queryset
+        return super().get_queryset().filter(category=category)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.get_category()
+        context['title'] = self.category.name
         return context
 
 
-class EventDetailView(DetailView):
+class EventDetailView(LoginRequiredMixin, DetailView):
     model = Event
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['program'] = prepare_program(self.object, self.object.sort_order or 1, Event.objects.filter(is_published=True).count())
+        return context
 
 
 class EventMixin(LoginRequiredMixin):

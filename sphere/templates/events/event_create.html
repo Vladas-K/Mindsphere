@@ -1,40 +1,52 @@
-{% extends "base.html" %}
-{% block title %}
-  {% if is_edit %}
-    Редактировать запись
-  {% else %}
-    Новый пост
-  {% endif %}
-{% endblock %}
-{% block content %}
-  {% load user_filters %}
-  <div class="row justify-content-center">
-    <div class="col-md-8 p-5">
-      <div class="card">
-        <div class="card-header">
-          {% if is_edit %}
-            Редактировать запись
-          {% else %}
-            Новое событие
-          {% endif %}
-        </div>
-        <div class="card-body">
-          {% include 'events/includes/form_error.html' %}
-            <form method="post" enctype="multipart/form-data" 
-            action="{% if is_edit %}{% url 'events:event_edit' slug=event.slug %}{% else %}{% url 'events:event_create' %}{% endif %}">
-            {% include 'events/includes/form_field.html' %}
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-primary" type="submit">
-                {% if is_edit %}
-                  Сохранить
-                {% else %}
-                  Добавить
-                {% endif %}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+{% extends 'base.html' %}
+{% load user_filters %}
+{% block title %}{% if is_edit %}Редактирование{% else %}Новая программа{% endif %} — DI EVENT{% endblock %}
+{% block body_class %}staff-editor{% endblock %}
+{% block framework_styles %}{% endblock %}
+{% block page %}
+<div class="editor-layout">
+  <header class="editor-heading">
+    <a class="editor-back" href="{% url 'events:index' %}"><span aria-hidden="true">←</span> В каталог</a>
+    <p class="auth-eyebrow">Рабочий раздел DI EVENT</p>
+    <h1>{% if is_edit %}Редактировать программу{% else %}Новая программа{% endif %}</h1>
+    <p class="editor-intro">Каталог и характеристики видны клиентам. Полное описание доступно только сотрудникам.</p>
+  </header>
+  {% if form.errors %}
+    <div class="editor-errors" role="alert">
+      <p>Проверьте отмеченные поля.</p>
+      <ul>
+        {% for field in form %}{% if field.errors %}<li><a href="#{{ field.id_for_label }}">{{ field.label }}</a></li>{% endif %}{% endfor %}
+        {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+      </ul>
     </div>
-  </div>
+  {% endif %}
+  <form method="post" enctype="multipart/form-data" class="editor-form">
+    {% csrf_token %}
+    {% for title, fields in form.sections %}
+      <fieldset class="editor-panel">
+        <legend>{{ title }}</legend>
+        <div class="editor-grid">
+          {% for field in fields %}
+            <div class="editor-field{% if field.name == 'name' or field.name == 'image' or field.name == 'slogan' or field.name == 'short_description' or field.name == 'description' or field.name == 'program_format' %} editor-field--wide{% endif %}{% if field.field.widget.input_type == 'checkbox' %} editor-field--check{% endif %}">
+              {% if field.field.widget.input_type == 'checkbox' %}
+                <div class="editor-check">{{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label></div>
+              {% else %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span aria-label="обязательное поле">*</span>{% endif %}</label>
+                {{ field|addclass:'editor-control' }}
+              {% endif %}
+              {% if field.help_text %}<small id="{{ field.auto_id }}_helptext">{{ field.help_text }}</small>{% endif %}
+              {% if field.errors %}
+                <ul class="editor-field-errors" id="{{ field.auto_id }}_error">{% for error in field.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endfor %}
+    <div class="editor-actions">
+      <button class="editor-submit{% if is_edit %} editor-submit--save{% endif %}" type="submit">{% if is_edit %}Сохранить изменения{% else %}Добавить программу<span aria-hidden="true">↗</span>{% endif %}</button>
+      <a class="editor-cancel" href="{% if is_edit %}{{ event.get_absolute_url }}{% else %}{% url 'events:index' %}{% endif %}">Отмена</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

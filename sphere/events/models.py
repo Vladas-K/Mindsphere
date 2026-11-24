@@ -9,7 +9,21 @@ User = get_user_model()
 class Event(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name='Слаг')
-    description = models.TextField(verbose_name='Описание')
+    slogan = models.CharField('Слоган', max_length=200, blank=True)
+    short_description = models.TextField('Краткое описание для клиентов', blank=True)
+    description = models.TextField(verbose_name='Полное описание для сотрудников', blank=True)
+    scenario = models.TextField('Сценарий', blank=True)
+    interactives = models.TextField('Интерактивы', blank=True)
+    host = models.TextField('Ведущий', blank=True)
+    actors = models.TextField('Актёры', blank=True)
+    music = models.TextField('Музыка', blank=True)
+    props = models.TextField('Реквизит', blank=True)
+    program_format = models.TextField('Формат', blank=True)
+    timing = models.TextField('Тайминг', blank=True)
+    dress_code = models.TextField('Образы / дресс-код', blank=True)
+    sort_order = models.PositiveIntegerField('Порядок показа', default=0)
+    is_published = models.BooleanField('Показывать в каталоге', default=True)
+    catalog_page = models.PositiveSmallIntegerField(null=True, blank=True, editable=False)
     pub_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')
     category = models.ForeignKey(
         'Category',
@@ -25,6 +39,7 @@ class Event(models.Model):
     )
 
     class Meta:
+        ordering = ('sort_order', 'pk')
         verbose_name = 'объект «Мероприятие»'
         verbose_name_plural = 'Мероприятия'
 
@@ -33,6 +48,21 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('events:event_detail', kwargs={"slug": self.slug})
+
+    @property
+    def concept_features(self):
+        fields = ('scenario', 'interactives', 'host', 'actors', 'music', 'props')
+        return self._public_fields(fields)
+
+    @property
+    def format_features(self):
+        return self._public_fields(('program_format', 'timing', 'dress_code'))
+
+    def _public_fields(self, fields):
+        return [
+            (self._meta.get_field(name).verbose_name, getattr(self, name))
+            for name in fields if getattr(self, name).strip()
+        ]
     
     def save(self, *args, **kwargs):
         if not self.slug:

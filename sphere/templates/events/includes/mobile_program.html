@@ -1,0 +1,43 @@
+{% load l10n %}
+<div class="mobile-program mobile-only">
+  <header class="mobile-program__heading">
+    <h2>{{ event.name }}</h2>
+  </header>
+  {% if event.image %}
+    <figure class="mobile-program__art">
+      <div class="mobile-program__image">
+        <img src="{{ event.image.url }}" alt="Иллюстрация программы «{{ event.name }}»" loading="lazy" decoding="async">
+        <svg class="mobile-program__overlay pdf-text" viewBox="0 0 480 501" aria-hidden="true" focusable="false">
+          {% if program.image_slogan_background %}
+            <rect x="0" y="392" width="480" height="109" fill="{{ program.image_slogan_background }}" />
+          {% endif %}
+          <text x="{{ program.image_number.x|unlocalize }}" y="{{ program.image_number.y|unlocalize }}" font-size="{{ program.image_number.size|unlocalize }}" font-weight="{{ program.image_number.weight }}" fill="{{ program.image_number.fill }}">{{ program.number|stringformat:'02d' }}</text>
+          {% for run in program.image_slogan %}
+            <text class="mobile-program__image-slogan" x="{{ run.x|unlocalize }}" y="{{ run.y|unlocalize }}" font-size="{{ run.size|unlocalize }}" font-weight="{{ run.weight }}" fill="{{ run.fill }}">{{ run.text }}</text>
+          {% endfor %}
+        </svg>
+      </div>
+      {% if event.slogan %}<figcaption>{{ event.slogan }}</figcaption>{% endif %}
+    </figure>
+  {% elif event.slogan %}
+    <p class="mobile-program__slogan">{{ event.slogan }}</p>
+  {% endif %}
+  {% if event.short_description %}<p class="mobile-program__description">{{ event.short_description }}</p>{% endif %}
+  {% if event.concept_features %}
+    <details class="mobile-concept">
+      <summary>Что входит в концепцию <span aria-hidden="true">+</span></summary>
+      <dl>
+        {% for label, value in event.concept_features %}
+          <div><dt>{{ label }}</dt><dd>{{ value }}</dd></div>
+        {% endfor %}
+      </dl>
+    </details>
+  {% endif %}
+  {% if event.format_features %}
+    <dl class="mobile-program__specs">
+      {% for label, value in event.format_features %}
+        <div><dt>{{ label }}</dt><dd>{{ value }}</dd></div>
+      {% endfor %}
+    </dl>
+  {% endif %}
+</div>

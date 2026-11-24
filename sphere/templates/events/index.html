@@ -1,33 +1,64 @@
 {% extends 'base.html' %}
-{% load thumbnail %}
-{% block title %}
-  {{ title }}
+{% load static %}
+{% block title %}DI EVENT — Авторские новогодние программы{% endblock %}
+{% block body_class %}pdf-catalog{% endblock %}
+{% block framework_styles %}{% endblock %}
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'events/pdf-catalog.css' %}?v=20261122-muted-intro">
+<script src="{% static 'events/mobile-catalog.js' %}" defer></script>
 {% endblock %}
-{% block content %}
-  <h1 class="text-center" style="color: red;" >{{ title }}</h1>
-  <h2>Авторские программы</h2>
-    {% for event in event_list %}
-      <h4>{{ event.name }}</h4>
-    <div class="row">
-      <div class="col-12 col-md-6 col-xl-3">
-        {% thumbnail event.image  "960x539" crop="center" upscale=True as im %}
-          <img src="{{ im.url }}" class="img-fluid mx-auto d-block">
-        {% endthumbnail %} <br>
-      </div>
-      <div class="col-12 col-md-6 col-xl-9" style="width: auto; overflow-wrap: break-word;">
-        <p>{{ event.description|truncatewords:40 }}</p>
-      </div>
-    
-    </div>
-      <a href="{{ event.get_absolute_url }}">подробнее</a><br>
-      {% if event.category %}
-        <a href="{{ event.category.get_absolute_url }}"
-           {% if not forloop.last %}style="margin-bottom: 20px;"{% endif %}>все {{ event.category | lower}}</a>
-      {% endif %}
-      {% if not forloop.last %}
-        <hr>
-      {% endif %}
-    {% endfor %}
-    {% include 'events/includes/paginator.html' %}
-  </div>
+{% block header %}{% if user.is_authenticated %}{% include 'includes/header.html' %}{% endif %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block page %}
+<div class="pdf-document">
+  <section class="pdf-page" id="cover" aria-label="Обложка каталога">
+    {% include 'events/includes/mobile_intro.html' %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="cover-title">
+      <title id="cover-title">DI EVENT — Авторские новогодние программы. 21 история, в которой главная роль — у вашей компании.</title>
+      {% include 'events/pdf/graphics-01.html' %}
+      <g class="pdf-text">{% include 'events/pdf/text-01.html' %}</g>
+    </svg>
+  </section>
+  <section class="pdf-page" id="about-programs" aria-label="О программах и комплектации">
+    {% include 'events/includes/mobile_about.html' %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Не просто тема — ваша история. Как читать каталог.">
+      {% include 'events/pdf/graphics-02.html' %}
+      <g class="pdf-text">{% include 'events/pdf/text-02.html' %}</g>
+    </svg>
+  </section>
+  <section class="pdf-page" id="catalog" aria-label="Оглавление каталога">
+    {% include 'events/includes/mobile_index.html' %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" aria-labelledby="index-title">
+      <title id="index-title">Выберите своё настроение</title>
+      {% include 'events/pdf/graphics-03.html' %}
+      <g class="pdf-text">
+        {% include 'events/pdf/text-03.html' %}
+        {% for program in programs %}
+          <a href="#program-{{ program.event.pk }}" class="pdf-index-link">
+            <rect x="{{ program.index_x }}" y="{{ program.index_hit_y }}" width="500" height="32" fill="transparent"/>
+            <text x="{{ program.index_x }}" y="{{ program.index_y }}" font-size="18" font-weight="900" fill="#d8212a">{{ forloop.counter|stringformat:'02d' }}</text>
+            <text x="{{ program.index_name_x }}" y="{{ program.index_y }}" font-size="19" font-weight="700" fill="#141414">{{ program.event.name }}</text>
+          </a>
+        {% endfor %}
+      </g>
+    </svg>
+  </section>
+  {% for program in programs %}
+    {% include 'events/includes/program.html' %}
+  {% empty %}
+    <p class="empty-catalog">В этой категории пока нет программ.</p>
+  {% endfor %}
+  <section class="pdf-page" id="contacts" aria-label="Контакты DI EVENT">
+    {% include 'events/includes/mobile_contacts.html' %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Подберём сценарий именно под вас. www.dievent.ru. +7 911 837-17-23.">
+      {% include 'events/pdf/graphics-25.html' %}
+      <g class="pdf-text">{% include 'events/pdf/text-25.html' %}</g>
+      <a href="https://www.dievent.ru/" aria-label="Сайт DI EVENT"><rect x="70" y="550" width="250" height="50" fill="transparent"/></a>
+      <a href="tel:+79118371723" aria-label="Позвонить DI EVENT"><rect x="590" y="550" width="300" height="50" fill="transparent"/></a>
+    </svg>
+  </section>
+</div>
+<a class="mobile-catalog-back" href="#catalog" aria-label="К списку программ" hidden>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 14 L12 8 L18 14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</a>
 {% endblock %}

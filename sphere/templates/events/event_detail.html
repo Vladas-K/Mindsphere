@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
-{% load thumbnail %}
-{% block content %}
-  <h1 class="text-center" style="color: red;">Dievent</h1> <br>
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-      {% thumbnail event.image  "960x539" crop="center" upscale=True as im %}
-        <img src="{{ im.url }}" class="img-fluid mx-auto d-block"> <!-- Выравнивание по центру -->
-      {% endthumbnail %} <br>
-    </div>
-    <div class="col-md-2"></div>
+{% load static %}
+{% block extra_styles %}<link rel="stylesheet" href="{% static 'events/pdf-catalog.css' %}?v=20261122-muted-intro">{% endblock %}
+{% block title %}{{ event.name }} — DI EVENT{% endblock %}
+{% block body_class %}staff-detail{% endblock %}
+{% block framework_styles %}{% endblock %}
+{% block page %}
+<div class="catalog-shell internal-detail">
+  <div class="detail-heading" id="catalog">
+    <a href="{% url 'events:index' %}#program-{{ event.pk }}">← Вернуться в каталог</a>
+    <span class="eyebrow">Карточка для сотрудников</span>
   </div>
-  <h2 class="text-center">{{object.name}}</h2>
-  <p>{{ event.description|linebreaksbr }}</p>
-  {% if user.is_authenticated %} 
-    <a button
-                type="submit"
-                class="btn btn-primary"
-                href="{% url 'events:event_edit' event.slug %}">Редактировать запись</a> 
-                <br>
-                <br>
-    <a button
-                type="submit"
-                class="btn btn-primary"
-                href="{% url 'events:event_delete' event.slug %}">Удалить запись</a>
-  {% endif %}           
+  {% include 'events/includes/program.html' with detail=True %}
+  <section class="internal-description" aria-labelledby="internal-description-title">
+    <p class="auth-eyebrow">Только для сотрудников</p>
+    <h2 id="internal-description-title">Полное описание</h2>
+    {% if event.description.strip %}
+      <div class="internal-description__content">{{ event.description|linebreaksbr }}</div>
+    {% else %}
+      <p class="internal-description__empty">Полное описание пока не добавлено.</p>
+    {% endif %}
+    <footer class="internal-description__actions">
+      <a class="detail-edit" href="{% url 'events:event_edit' event.slug %}#id_description">{% if event.description.strip %}Редактировать описание{% else %}Добавить описание{% endif %}</a>
+      <a class="detail-delete" href="{% url 'events:event_delete' event.slug %}">Удалить программу</a>
+    </footer>
+  </section>
+</div>
 {% endblock %}

@@ -10,30 +10,29 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/fav/favicon-16x16.png' %}">
     <meta name="msapplication-TileColor" content="#000">
     <meta name="theme-color" content="#ffffff">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    {% block framework_styles %}<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">{% endblock %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'events/catalog.css' %}">
+    {% if user.is_authenticated %}<link rel="stylesheet" href="{% static 'users/staff.css' %}?v=20261122-save-button">{% endif %}
+    {% block extra_styles %}{% endblock %}
     <title>
     {% block title %}
-    Последние обновления на сайте
+    DI EVENT — Авторские программы
     {% endblock %}
     </title>
   </head>
-  <body>
-    <header>
-      {% include 'includes/header.html' %}
-    </header>
-    <main>
-      <div class="container py-5">
+  <body id="top" class="{% block body_class %}{% endblock %}">
+    <a class="skip-link" href="#main">К содержимому</a>
+    {% block header %}{% include 'includes/header.html' %}{% endblock %}
+    <main id="main">
+      {% block page %}
+      <div class="container py-5 standard-page">
       {% block content %}
         Контент не подвезли :
       {% endblock %}
       </div>
+      {% endblock %}
     </main>
-    <footer>
-      {% include 'includes/footer.html' %} 
-    </footer>
+    {% block footer %}{% include 'includes/footer.html' %}{% endblock %}
   </body>
 </html>

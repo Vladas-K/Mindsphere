@@ -1,0 +1,16 @@
+.nav-link.active {
+    color: #ff0000 !important; /* Измените цвет на тот, который вы хотите */
+}
+
+/* .navbar .nav-item  {
+    display: inline;
+} */
+
+/* .navbar .nav-item form button {
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+} */
