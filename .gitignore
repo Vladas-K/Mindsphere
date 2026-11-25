@@ -162,6 +162,10 @@ cython_debug/
 
 # Generated assets only; source static files must be tracked.
 /sphere/static_collected/
+# Beget document root, symlinks and Passenger runtime files.
+/public_html/
+/public
+/tmp/
 .DS_Store
 
 media/

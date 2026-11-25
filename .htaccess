@@ -1,0 +1,3 @@
+PassengerEnabled On
+PassengerFriendlyErrorPages off
+PassengerPython /home/v/v2505714/mindsphere_new/venv/bin/python3.12
