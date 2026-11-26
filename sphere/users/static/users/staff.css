@@ -88,7 +88,7 @@
 .detail-edit:hover { background: #dde4e9; color: #3f5263; }
 .detail-delete { margin-left: auto; color: #a3444c; border-color: #e5cdd0; }
 .detail-delete:hover { color: #8d333b; background: #fff3f3; border-color: #cfa5ab; }
-@media (max-width: 799px) {
+@media (width < 1024px) {
   .staff-detail .internal-detail { padding: 0; }
   .staff-detail .detail-heading { margin: 0 20px; gap: 8px; }
   .staff-detail .internal-description { margin: 0 20px 32px; padding: 24px 20px; border-radius: 20px; }
