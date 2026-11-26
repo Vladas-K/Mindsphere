@@ -174,3 +174,6 @@ old_views.py
 
 # Local agent instructions
 /AGENTS.md
+
+# Deployment history and server operations.
+/DEVELOPMENT.md

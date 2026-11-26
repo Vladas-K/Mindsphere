@@ -1,25 +1,14 @@
-{% extends "base.html" %}
-{% block title %}
-  Удаление события
-{% endblock %}
-{% block content %}
-  <div class="row justify-content-center">
-    <div class="col-md-8 p-5">
-      <div class="card">
-        <div class="card-header">
-          Удаление события
-        </div>
-        <div class="card-body">
-          <p>Вы уверены, что хотите удалить событие "{{ object }}"?</p>
-          <form method="post">
-            {% csrf_token %}
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-danger" type="submit">Удалить</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+{% extends 'users/service_base.html' %}
+{% block title %}Удалить программу — DI EVENT{% endblock %}
+{% block service_content %}
+<h1 id="service-title">Удалить программу?</h1>
+<p class="service-name">{{ object }}</p>
+<p class="editor-intro">Программа будет удалена из каталога и рабочего раздела. Отменить удаление после подтверждения нельзя.</p>
+<form method="post">
+  {% csrf_token %}
+  <div class="editor-actions">
+    <a class="editor-cancel" href="{{ object.get_absolute_url }}">Отмена</a>
+    <button class="editor-cancel detail-delete" type="submit">Удалить программу</button>
   </div>
+</form>
 {% endblock %}
-

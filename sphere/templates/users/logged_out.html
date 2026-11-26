@@ -1,20 +1,10 @@
-{# Это код файла templates/users/logged_out.html #}
-
-{% extends 'base.html' %}
-{% block title %}Вы вышли из системы{% endblock %}
-{% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-8 p-5">
-    <div class="card">
-      <div class="card-header">
-        Выход
-      </div>
-      <div class="card-body">
-        <p>
-          Вы вышли из своей учётной записи. Ждём вас снова!
-        </p>
-      </div> <!-- card body -->
-    </div> <!-- card -->
-  </div> <!-- col -->
-</div> <!-- row -->
+{% extends 'users/service_base.html' %}
+{% block title %}Вы вышли из системы — DI EVENT{% endblock %}
+{% block service_content %}
+<h1 id="service-title">Вы вышли из системы</h1>
+<p class="editor-intro">Рабочая сессия завершена. Публичный каталог по-прежнему доступен.</p>
+<div class="editor-actions">
+  <a class="editor-submit" href="{% url 'users:login' %}">Войти снова</a>
+  <a class="editor-cancel" href="{% url 'events:index' %}">В каталог</a>
+</div>
 {% endblock %}

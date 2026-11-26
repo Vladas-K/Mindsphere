@@ -119,3 +119,13 @@
   .auth-field input, .editor-control, .auth-submit, .editor-submit, .editor-cancel, .password-toggle,
   .detail-edit, .detail-delete { transition: none; }
 }
+
+.service-layout { max-width: 740px; }
+.service-panel h1 { margin: 0 0 20px; font-size: clamp(28px, 4vw, 36px); line-height: 1.15; letter-spacing: -.03em; overflow-wrap: anywhere; }
+.service-panel .editor-intro { margin-bottom: 28px; }
+.service-field { margin-bottom: 24px; }
+.service-help { margin-top: 10px; color: #6c6c67; font-size: 13px; line-height: 1.6; }
+.service-help ul { margin: 0; padding-left: 20px; }
+.service-name { font-size: 20px; line-height: 1.5; overflow-wrap: anywhere; }
+.service-panel .detail-delete { margin-left: 0; font-family: inherit; cursor: pointer; background: transparent; }
+.service-panel .detail-delete:hover { background: #fff3f3; }
