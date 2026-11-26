@@ -57,13 +57,15 @@ body.pdf-catalog { background: #efefed; }
   .pdf-page, .pdf-page.program-sheet { margin: 0; scroll-margin-top: 16px; }
   .pdf-page.program-sheet { margin-bottom: 56px; }
   .mobile-eyebrow { font-size: 11px; font-weight: 700; line-height: 1.5; letter-spacing: .08em; text-transform: uppercase; color: #d8212a; margin: 0 0 14px; }
-  .mobile-cover.mobile-only { display: flex; flex-direction: column; justify-content: space-between; gap: 36px; box-sizing: border-box; min-height: 75vh; min-height: 75svh; padding: 32px 24px 44px; background: #141414; color: #f7f7f4; border-radius: 0; }
-  .mobile-cover .mobile-logo { margin-bottom: 0; }
+  .mobile-cover.mobile-only { display: grid; grid-template-rows: auto minmax(36px, .8fr) auto minmax(36px, 1.2fr) auto; box-sizing: border-box; min-height: 75vh; min-height: 75svh; padding: 32px 24px 44px; background: #141414; color: #f7f7f4; border-radius: 0; }
+  .mobile-cover .mobile-logo { grid-row: 1; margin-bottom: 0; }
+  .mobile-cover__message { grid-row: 3; }
   .mobile-logo { display: block; width: 52px; height: auto; padding: 8px; background: #fff; margin-bottom: 28px; }
   .mobile-cover h1 { font-size: clamp(30px, 8.7vw, 44px); font-weight: 900; line-height: 1.04; letter-spacing: -.035em; margin: 0 0 20px; text-transform: uppercase; }
   .mobile-cover h1 span { color: #f04450; }
+  .mobile-cover__subtitle { margin: 0 0 20px; font-size: 14px; line-height: 1.5; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #d2d2cc; }
   .mobile-cover__intro { font-size: 17px; line-height: 1.55; color: #d2d2cc; margin: 0; max-width: 34em; }
-  .mobile-cover__values { margin: 0; font-size: 11px; font-weight: 700; line-height: 1.6; letter-spacing: .12em; text-transform: uppercase; color: #bdbdb6; }
+  .mobile-cover__values { grid-row: 5; margin: 0; font-size: 11px; font-weight: 700; line-height: 1.6; letter-spacing: .12em; text-transform: uppercase; color: #bdbdb6; }
   .mobile-primary-link { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 50px; padding: 14px 16px; background: #d8212a; color: #fff; font-size: 15px; font-weight: 700; text-decoration: none; border-radius: 14px; }
   .mobile-primary-link:hover { background: #b91821; color: #fff; }
   .mobile-primary-link > span { flex-shrink: 0; }
