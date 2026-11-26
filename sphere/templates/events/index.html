@@ -14,7 +14,7 @@
   <section class="pdf-page" id="cover" aria-label="Обложка каталога">
     {% include 'events/includes/mobile_intro.html' %}
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="cover-title">
-      <title id="cover-title">DI EVENT — Авторские новогодние программы. 21 история, в которой главная роль — у вашей компании.</title>
+      <title id="cover-title">DI EVENT — Авторские новогодние программы. {{ catalog_story_summary }}</title>
       {% include 'events/pdf/graphics-01.html' %}
       <g class="pdf-text">{% include 'events/pdf/text-01.html' %}</g>
     </svg>
@@ -53,6 +53,7 @@
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Подберём сценарий именно под вас. www.dievent.ru. +7 911 837-17-23.">
       {% include 'events/pdf/graphics-25.html' %}
       <g class="pdf-text">{% include 'events/pdf/text-25.html' %}</g>
+      <a class="contact-catalog-back" href="#catalog" aria-label="К списку программ"><circle cx="600" cy="633" r="24" fill="transparent"/></a>
       <a href="https://www.dievent.ru/" aria-label="Сайт DI EVENT"><rect x="70" y="550" width="250" height="50" fill="transparent"/></a>
       <a href="tel:+79118371723" aria-label="Позвонить DI EVENT"><rect x="590" y="550" width="300" height="50" fill="transparent"/></a>
     </svg>

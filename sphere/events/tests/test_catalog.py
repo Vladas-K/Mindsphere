@@ -39,6 +39,51 @@ class PublicCatalogTests(TestCase):
                 self.assertNotContains(response, self.event.get_absolute_url())
                 self.assertNotContains(response, 'Интерактивы')
 
+    def test_cover_count_tracks_creating_hiding_and_deleting_programs(self):
+        url = reverse('events:index')
+        response = self.client.get(url)
+        self.assertContains(response, '>1</text>')
+        self.assertContains(response, '1 история, в которой главная роль — у вашей компании.')
+        self.client.force_login(self.employee)
+        response = self.client.post(reverse('events:event_create'), {
+            'name': 'Новая программа', 'slug': 'new-program',
+            'is_published': 'on', 'sort_order': '0',
+        })
+        self.assertRedirects(response, url)
+        response = self.client.get(url)
+        self.assertContains(response, '>2</text>')
+        self.assertContains(response, '2 истории, в которых главная роль — у вашей компании.')
+        self.assertTrue(all(program['total'] == 2 for program in response.context['programs']))
+        event = Event.objects.get(slug='new-program')
+        Event.objects.filter(pk=event.pk).update(is_published=False)
+        self.assertEqual(self.client.get(url).context['catalog_total'], 1)
+        event.delete()
+        self.assertEqual(self.client.get(url).context['catalog_total'], 1)
+        self.event.delete()
+        self.assertContains(self.client.get(url), '0 историй, в которых главная роль — у вашей компании.')
+
+    def test_cover_count_plural_forms_and_category_scope(self):
+        url = reverse('events:index')
+        for total, words in ((5, '5 историй'), (11, '11 историй'),
+                             (21, '21 история'), (22, '22 истории')):
+            with self.subTest(total=total):
+                current = Event.objects.count()
+                Event.objects.bulk_create([
+                    Event(name=f'Программа {n}', slug=f'count-{n}')
+                    for n in range(current, total)
+                ])
+                response = self.client.get(url)
+                self.assertContains(response, '>' + str(total) + '</text>')
+                self.assertContains(response, words + ', в котор')
+                self.assertTrue(all(program['total'] == total for program in response.context['programs']))
+        response = self.client.get(self.category.get_absolute_url())
+        self.assertEqual(response.context['catalog_total'], 1)
+
+    def test_contacts_arrow_links_to_catalog_index(self):
+        response = self.client.get(reverse('events:index'))
+        self.assertContains(response, '<a class="contact-catalog-back" href="#catalog" aria-label="К списку программ">')
+        self.assertContains(response, '<circle cx="600" cy="633" r="24" fill="transparent"/>')
+
     def test_all_programs_are_visible_in_manual_order(self):
         first = Event.objects.create(name='Первая', description='private', sort_order=1)
         Event.objects.bulk_create([

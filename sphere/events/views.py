@@ -4,6 +4,8 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from pytils.numeral import get_plural
+
 from .forms import EventForm
 from .models import Category, Event
 from .catalog import prepare_program
@@ -20,6 +22,14 @@ class EventListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Авторские программы'
         events = list(context['event_list'])
+        total = len(events)
+        singular = total % 10 == 1 and total % 100 != 11
+        context['catalog_total'] = total
+        context['catalog_story_summary'] = (
+            get_plural(total, 'история, истории, историй')
+            + (', в которой' if singular else ', в которых')
+            + ' главная роль — у вашей компании.'
+        )
         context['programs'] = [
             prepare_program(event, number, len(events))
             for number, event in enumerate(events, 1)
