@@ -34,6 +34,8 @@ class EventListView(ListView):
             prepare_program(event, number, len(events))
             for number, event in enumerate(events, 1)
         ]
+        split = max(1, total // 2)
+        context['index_columns'] = (context['programs'][:split], context['programs'][split:])
         return context
 
 
@@ -60,7 +62,9 @@ class EventDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['program'] = prepare_program(self.object, self.object.sort_order or 1, Event.objects.filter(is_published=True).count())
+        published_ids = list(Event.objects.filter(is_published=True).values_list('pk', flat=True))
+        number = published_ids.index(self.object.pk) + 1 if self.object.pk in published_ids else None
+        context['program'] = prepare_program(self.object, number, len(published_ids))
         return context
 
 

@@ -1,27 +1,32 @@
-{% load l10n %}
 {% with event=program.event %}
-<article class="pdf-page program-sheet" id="program-{{ event.pk }}" aria-label="{{ event.name }}">
-  {% include 'events/includes/mobile_program.html' %}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" aria-label="{{ event.name }}">
-    <defs>
-      <clipPath id="program-art-{{ event.pk }}" clipPathUnits="objectBoundingBox">
-        <rect class="pdf-image-clip" width="1" height="1" />
-      </clipPath>
-    </defs>
-    {% include program.graphics_template %}
-    <g class="pdf-text">
-      {% for run in program.runs %}
-        <text{% if run.css_class %} class="{{ run.css_class }}"{% endif %} x="{{ run.x|unlocalize }}" y="{{ run.y|unlocalize }}" font-size="{{ run.size|unlocalize }}" font-weight="{{ run.weight }}" fill="{{ run.fill }}">{{ run.text }}</text>
-      {% endfor %}
-    </g>
-    <a class="program-footer-link" href="#catalog" aria-label="К списку программ"><circle cx="599" cy="632" r="20" fill="transparent"/></a>
-    <a class="program-footer-link" href="https://www.dievent.ru/" aria-label="Сайт DI EVENT"><rect x="40" y="615" width="150" height="28" fill="transparent"/></a>
-  </svg>
-  {% if user.is_authenticated %}
-    <div class="employee-actions">
-      {% if not detail %}<a href="{{ event.get_absolute_url }}">Подробнее</a>{% endif %}
-      <a href="{% url 'events:event_edit' event.slug %}">Редактировать</a>
+<article class="catalog-page program-sheet" id="program-{{ event.pk }}" aria-label="{{ event.name }}">
+  <div class="catalog-program{% if not event.image %} catalog-program--no-image{% endif %}">
+    <header class="mobile-program__heading">{% if program.number %}<p class="program-kicker">Программа / {{ program.number|stringformat:'02d' }}</p>{% else %}<p class="program-kicker program-status">Не опубликовано</p>{% endif %}<h2>{{ event.name }}</h2></header>
+    {% if event.image %}
+    <figure class="program-art{% if not program.original_art %} program-art--custom{% endif %}" style="--art-ink: {{ program.art_ink }}; --slogan-ink: {{ program.slogan_ink }}; --art-background: {{ program.art_background }}; --art-rule: {{ program.art_rule }}">
+      <img src="{{ event.image.url }}" alt="Иллюстрация программы «{{ event.name }}»" loading="lazy" decoding="async">
+      {% if program.number %}<span class="program-art__number">{{ program.number|stringformat:'02d' }}</span>{% endif %}
+      {% if program.image_slogan_background %}<span class="program-art__mask" style="background: {{ program.image_slogan_background }}" aria-hidden="true"></span>{% endif %}
+      {% if event.slogan.strip %}<figcaption class="program-art__slogan"{% if program.image_slogan_background %} style="background: {{ program.image_slogan_background }}"{% endif %}>{{ event.slogan }}</figcaption>{% endif %}
+    </figure>
+    {% endif %}
+    <div class="program-copy">
+      {% if not event.image %}{% if program.number %}<p class="program-number">{{ program.number|stringformat:'02d' }}</p>{% endif %}{% if event.slogan.strip %}<p class="mobile-program__slogan">{{ event.slogan }}</p>{% endif %}{% endif %}
+      {% if event.short_description.strip %}<p class="mobile-program__description">{{ event.short_description }}</p>{% endif %}
+      {% if event.concept_features %}
+      <details class="mobile-concept" open>
+        <summary>Что входит в концепцию <span aria-hidden="true">+</span></summary>
+        <dl>{% for label, value in event.concept_features %}<div><dt>{{ label }}</dt><dd>{{ value }}</dd></div>{% endfor %}</dl>
+      </details>
+      {% endif %}
+      {% if event.format_features %}<dl class="mobile-program__specs">{% for label, value in event.format_features %}<div><dt>{% if label == "Образы / дресс-код" %}<span class="spec-label-full">{{ label }}</span><span class="spec-label-short">Образы</span>{% else %}{{ label }}{% endif %}</dt><dd>{{ value }}</dd></div>{% endfor %}</dl>{% endif %}
     </div>
-  {% endif %}
+  </div>
+  <footer class="catalog-sheet-footer">
+    <a href="https://www.dievent.ru/">www.dievent.ru</a>
+    <a class="sheet-catalog-back" href="#catalog" aria-label="К списку программ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <span>{% if program.number %}{{ program.number|stringformat:'02d' }} / {{ program.total|stringformat:'02d' }}{% else %}Не опубликовано{% endif %}</span>
+  </footer>
+  {% if user.is_authenticated %}<div class="employee-actions">{% if not detail %}<a href="{{ event.get_absolute_url }}">Подробнее</a>{% endif %}<a href="{% url 'events:event_edit' event.slug %}">Редактировать</a></div>{% endif %}
 </article>
 {% endwith %}

@@ -38,7 +38,6 @@ class StaticURLTests(TestCase):
     def test_pages_availability(self):
         urls = (
             ('events:index', None),
-            ('events:about', None),
             ('users:login', None),
             ('events:category_events', (self.category.slug,)),
         )

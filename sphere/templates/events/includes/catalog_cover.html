@@ -1,10 +1,13 @@
 {% load static %}
-<div class="mobile-cover mobile-only">
+<div class="mobile-cover">
   <img class="mobile-logo" src="{% static 'events/logo.svg' %}" alt="DI EVENT" width="68" height="88">
+  <div class="cover-count" aria-hidden="true">{{ catalog_total }}</div>
   <div class="mobile-cover__message">
+    <p class="cover-label">Каталог</p>
     <h1>Авторские<br><span>программы</span></h1>
     <p class="mobile-cover__subtitle">Новогодние корпоративы</p>
+    <p class="cover-story">{{ catalog_story_summary }}</p>
     <p class="mobile-cover__intro">Истории, в которых главная роль — у вашей компании.</p>
   </div>
-  <p class="mobile-cover__values">Эмоции / Атмосфера / Успех</p>
+  <p class="mobile-cover__values"><span>Эмоции</span><i aria-hidden="true"> / </i><span>Атмосфера</span><i aria-hidden="true"> / </i><span>Успех</span></p>
 </div>

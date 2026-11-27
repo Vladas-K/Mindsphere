@@ -1,62 +1,31 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}DI EVENT — Авторские новогодние программы{% endblock %}
-{% block body_class %}pdf-catalog{% endblock %}
-{% block framework_styles %}{% endblock %}
+{% block body_class %}public-catalog{% endblock %}
 {% block extra_styles %}
-<link rel="stylesheet" href="{% static 'events/pdf-catalog.css' %}?v=20261126-mobile-logo">
-<script src="{% static 'events/mobile-catalog.js' %}" defer></script>
+<link rel="stylesheet" href="{% static 'events/catalog-responsive.css' %}?v=20261127-audit-cleanup">
+<script src="{% static 'events/mobile-catalog.js' %}?v=20261127-audit-cleanup" defer></script>
 {% endblock %}
 {% block header %}{% if user.is_authenticated %}{% include 'includes/header.html' %}{% endif %}{% endblock %}
 {% block footer %}{% endblock %}
 {% block page %}
-<div class="pdf-document">
-  <section class="pdf-page" id="cover" aria-label="Обложка каталога">
-    {% include 'events/includes/mobile_intro.html' %}
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="cover-title">
-      <title id="cover-title">DI EVENT — Авторские новогодние программы. {{ catalog_story_summary }}</title>
-      {% include 'events/pdf/graphics-01.html' %}
-      <g class="pdf-text">{% include 'events/pdf/text-01.html' %}</g>
-    </svg>
+<div class="catalog-document">
+  <section class="catalog-page catalog-cover" id="cover" aria-label="Обложка каталога">
+    <div class="catalog-html">{% include 'events/includes/catalog_cover.html' %}</div>
   </section>
-  <section class="pdf-page" id="about-programs" aria-label="О программах и комплектации">
-    {% include 'events/includes/mobile_about.html' %}
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Не просто тема — ваша история. Как читать каталог.">
-      {% include 'events/pdf/graphics-02.html' %}
-      <g class="pdf-text">{% include 'events/pdf/text-02.html' %}</g>
-    </svg>
+  <section class="catalog-page catalog-about" id="about-programs" aria-label="О программах и комплектации">
+    <div class="catalog-html">{% include 'events/includes/catalog_about.html' %}</div>
   </section>
-  <section class="pdf-page" id="catalog" aria-label="Оглавление каталога">
-    {% include 'events/includes/mobile_index.html' %}
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" aria-labelledby="index-title">
-      <title id="index-title">Выберите своё настроение</title>
-      {% include 'events/pdf/graphics-03.html' %}
-      <g class="pdf-text">
-        {% include 'events/pdf/text-03.html' %}
-        {% for program in programs %}
-          <a href="#program-{{ program.event.pk }}" class="pdf-index-link">
-            <rect x="{{ program.index_x }}" y="{{ program.index_hit_y }}" width="500" height="32" fill="transparent"/>
-            <text x="{{ program.index_x }}" y="{{ program.index_y }}" font-size="18" font-weight="900" fill="#d8212a">{{ forloop.counter|stringformat:'02d' }}</text>
-            <text x="{{ program.index_name_x }}" y="{{ program.index_y }}" font-size="19" font-weight="700" fill="#141414">{{ program.event.name }}</text>
-          </a>
-        {% endfor %}
-      </g>
-    </svg>
+  <section class="catalog-page catalog-index" id="catalog" aria-label="Оглавление каталога">
+    <div class="catalog-html">{% include 'events/includes/catalog_index.html' %}</div>
   </section>
   {% for program in programs %}
     {% include 'events/includes/program.html' %}
   {% empty %}
     <p class="empty-catalog">В этой категории пока нет программ.</p>
   {% endfor %}
-  <section class="pdf-page" id="contacts" aria-label="Контакты DI EVENT">
-    {% include 'events/includes/mobile_contacts.html' %}
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Подберём сценарий именно под вас. www.dievent.ru. +7 911 837-17-23.">
-      {% include 'events/pdf/graphics-25.html' %}
-      <g class="pdf-text">{% include 'events/pdf/text-25.html' %}</g>
-      <a class="contact-catalog-back" href="#catalog" aria-label="К списку программ"><circle cx="600" cy="633" r="24" fill="transparent"/></a>
-      <a href="https://www.dievent.ru/" aria-label="Сайт DI EVENT"><rect x="70" y="550" width="250" height="50" fill="transparent"/></a>
-      <a href="tel:+79118371723" aria-label="Позвонить DI EVENT"><rect x="590" y="550" width="300" height="50" fill="transparent"/></a>
-    </svg>
+  <section class="catalog-page catalog-contacts" id="contacts" aria-label="Контакты DI EVENT">
+    <div class="catalog-html">{% include 'events/includes/catalog_contacts.html' %}</div>
   </section>
 </div>
 <a class="mobile-catalog-back" href="#catalog" aria-label="К списку программ" hidden>

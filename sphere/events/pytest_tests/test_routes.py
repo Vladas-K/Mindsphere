@@ -8,7 +8,6 @@ from http import HTTPStatus
     'name, kwargs, method',
     [
         ('events:index', None, 'get'),
-        ('events:about', None, 'get'),
         ('users:login', None, 'get'),
         ('users:logout', None, 'post'),
         ('events:category_events', {'cat_slug': 'example-slug'}, 'get')

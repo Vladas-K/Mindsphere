@@ -21,7 +21,7 @@ class Command(BaseCommand):
         if len(rows) != 21 or {r['sort_order'] for r in rows} != set(range(1, 22)):
             raise CommandError('Неверный состав исходного каталога.')
         aliases = {1: 'Рок-н-ролльная вечеринка', 2: 'Гэтсби'}
-        art_root = Path(__file__).resolve().parents[2] / 'static/events/pdf/art'
+        art_root = Path(__file__).resolve().parents[2] / 'static/events/catalog/art'
         for row in rows:
             src = art_root / f"{row['sort_order']:02d}.png"
             dst = Path(settings.MEDIA_ROOT) / row['image']

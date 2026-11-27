@@ -79,12 +79,10 @@ class EmployeeLoginTests(TestCase):
         self.assertEqual(self.client.get(self.event.get_absolute_url()).status_code, 302)
 
     def test_guest_pages_do_not_advertise_employee_access(self):
-        for url in (reverse('events:index'), reverse('events:about')):
-            with self.subTest(url=url):
-                response = self.client.get(url)
-                self.assertNotContains(response, reverse('users:login'))
-                self.assertNotContains(response, 'staff-bar')
-                self.assertNotContains(response, 'Вход для сотрудников')
+        response = self.client.get(reverse('events:index'))
+        self.assertNotContains(response, reverse('users:login'))
+        self.assertNotContains(response, 'staff-bar')
+        self.assertNotContains(response, 'Вход для сотрудников')
 
     def test_password_change_errors_are_visible_and_password_is_unchanged(self):
         self.client.force_login(self.employee)
@@ -155,3 +153,13 @@ class EmployeeLoginTests(TestCase):
     def test_password_pages_require_login(self):
         for name in ('users:password_change', 'users:password_change_done'):
             self.assertEqual(self.client.get(reverse(name)).status_code, 302)
+
+    def test_registration_and_email_password_reset_are_not_available(self):
+        paths = (
+            '/auth/signup/', '/auth/password_reset/', '/auth/password_reset/done/',
+            '/auth/reset/MQ/example-token/', '/auth/reset/done/',
+        )
+        for path in paths:
+            for method in ('get', 'post'):
+                with self.subTest(path=path, method=method):
+                    self.assertEqual(getattr(self.client, method)(path).status_code, 404)

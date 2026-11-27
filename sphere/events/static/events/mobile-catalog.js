@@ -13,3 +13,13 @@ if (catalogIndex && catalogBack) {
   window.addEventListener('resize', updateBackLink, { passive: true });
   updateBackLink();
 }
+
+// One HTML component: disclosures start closed on narrow screens, open on desktop.
+const catalogWide = window.matchMedia('(min-width: 1024px)');
+const updateCatalogDisclosures = () => {
+  document.querySelectorAll('.mobile-concept, .mobile-about > details').forEach((details) => {
+    details.open = catalogWide.matches;
+  });
+};
+catalogWide.addEventListener('change', updateCatalogDisclosures);
+updateCatalogDisclosures();

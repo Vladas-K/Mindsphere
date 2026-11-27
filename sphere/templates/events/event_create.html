@@ -2,7 +2,6 @@
 {% load user_filters %}
 {% block title %}{% if is_edit %}Редактирование{% else %}Новая программа{% endif %} — DI EVENT{% endblock %}
 {% block body_class %}staff-editor{% endblock %}
-{% block framework_styles %}{% endblock %}
 {% block page %}
 <div class="editor-layout">
   <header class="editor-heading">
@@ -44,7 +43,7 @@
       </fieldset>
     {% endfor %}
     <div class="editor-actions">
-      <button class="editor-submit{% if is_edit %} editor-submit--save{% endif %}" type="submit">{% if is_edit %}Сохранить изменения{% else %}Добавить программу<span aria-hidden="true">↗</span>{% endif %}</button>
+      <button class="editor-submit{% if is_edit %} editor-submit--save{% endif %}" type="submit">{% if is_edit %}Сохранить изменения{% else %}Добавить программу{% endif %}</button>
       <a class="editor-cancel" href="{% if is_edit %}{{ event.get_absolute_url }}{% else %}{% url 'events:index' %}{% endif %}">Отмена</a>
     </div>
   </form>
