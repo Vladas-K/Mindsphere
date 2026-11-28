@@ -68,7 +68,9 @@ def prepare_program(event, number, total):
     original_art = bool(artwork and event.image and event.image.name == artwork['image'])
     return {
         'event': event, 'number': number, 'total': total,
-        'art_ink': artwork['number_ink'] if original_art else '#ffffff',
+        'art_ink': {'white': '#ffffff', 'black': '#171717'}.get(
+            event.number_color, artwork['number_ink'] if original_art else '#ffffff',
+        ),
         'slogan_ink': artwork['slogan_ink'] if original_art else '#ffffff',
         'art_rule': ART_RULES.get(page, '#b43c46'),
         'art_background': ART_BACKGROUNDS[page] if original_art else '#263546',

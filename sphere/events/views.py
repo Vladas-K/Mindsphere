@@ -73,6 +73,11 @@ class EventMixin(LoginRequiredMixin):
     template_name = 'events/event_create.html'
     form_class = EventForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_success_url(self):
         return reverse_lazy('events:index')
 

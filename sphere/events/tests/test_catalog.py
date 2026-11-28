@@ -13,6 +13,64 @@ from events.catalog import catalog_source, prepare_program
 
 
 class PublicCatalogTests(TestCase):
+    def test_image_guidance_and_optional_custom_caption(self):
+        admin_user = get_user_model()(is_superuser=True)
+        form = EventForm(user=admin_user)
+        self.assertIn('1200 × 1252 px', form.fields['image'].help_text)
+        self.assertIn('оставьте поле пустым', form.fields['slogan'].help_text)
+        self.assertFalse(form.fields['slogan'].required)
+        Event.objects.filter(pk=self.event.pk).update(image='events/custom.png', slogan=' ')
+        response = self.client.get(reverse('events:index'))
+        self.assertContains(response, 'program-art--custom')
+        self.assertNotContains(response, '<figcaption')
+        self.assertNotContains(response, 'class="program-art__mask"')
+        Event.objects.filter(pk=self.event.pk).update(slogan='Наш слоган')
+        self.assertContains(self.client.get(reverse('events:index')), '>Наш слоган</figcaption>')
+
+    def test_number_colour_choices_are_saved_and_rendered(self):
+        self.client.force_login(self.employee)
+        for colour, ink in (('black', '#171717'), ('white', '#ffffff')):
+            with self.subTest(colour=colour):
+                response = self.client.post(reverse('events:event_create'), {
+                    'name': 'Цвет ' + colour, 'slug': 'colour-' + colour,
+                    'number_color': colour, 'is_published': 'on',
+                })
+                self.assertEqual(response.status_code, 302)
+                event = Event.objects.get(slug='colour-' + colour)
+                self.assertEqual(event.number_color, colour)
+                self.assertEqual(prepare_program(event, 1, 1)['art_ink'], ink)
+                event.image = 'events/example.png'
+                event.save()
+                self.assertContains(self.client.get(reverse('events:index')), '--art-ink: ' + ink)
+                edit_url = reverse('events:event_edit', args=[event.slug])
+                self.assertContains(self.client.get(edit_url), 'id="id_number_color"')
+                response = self.client.post(edit_url, {
+                    'name': event.name, 'slug': event.slug,
+                    'number_color': 'black' if colour == 'white' else 'white',
+                })
+                self.assertEqual(response.status_code, 302)
+                event.refresh_from_db()
+                self.assertNotEqual(event.number_color, colour)
+
+    def test_number_colour_preserves_legacy_palette_and_allows_override(self):
+        row = next(row for row in catalog_source()['programs'] if row['catalog_page'] == 8)
+        event = Event(name='Исходная', catalog_page=8, image=row['image'], number_color=None)
+        self.assertEqual(prepare_program(event, 1, 1)['art_ink'], '#292929')
+        self.assertEqual(EventForm(instance=event).initial['number_color'], 'black')
+        form = EventForm(data={'name': event.name}, instance=event)
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertIsNone(form.cleaned_data['number_color'])
+        event.number_color = 'white'
+        self.assertEqual(prepare_program(event, 1, 1)['art_ink'], '#ffffff')
+
+    def test_number_colour_field_has_two_choices_and_rejects_other_values(self):
+        form = EventForm()
+        self.assertEqual(list(form.fields['number_color'].choices), [('white', 'Белый'), ('black', 'Чёрный')])
+        self.assertEqual(form.initial['number_color'], 'white')
+        invalid = EventForm(data={'name': 'Программа', 'number_color': 'red'})
+        self.assertFalse(invalid.is_valid())
+        self.assertIn('number_color', invalid.errors)
+
     @classmethod
     def setUpTestData(cls):
         cls.category = Category.objects.create(name='Программы', slug='programs')
@@ -47,7 +105,7 @@ class PublicCatalogTests(TestCase):
         self.client.force_login(self.employee)
         response = self.client.post(reverse('events:event_create'), {
             'name': 'Новая программа', 'slug': 'new-program',
-            'is_published': 'on', 'sort_order': '0',
+            'is_published': 'on', 'sort_order': '1',
         })
         self.assertRedirects(response, url)
         response = self.client.get(url)

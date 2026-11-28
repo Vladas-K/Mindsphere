@@ -69,6 +69,7 @@ body.public-catalog { background: #f7f7f4; }
 .program-art__number { position: absolute; top: 2.67%; left: 6.46%; font-size: 11.875cqw; line-height: 1; font-weight: 900; }
 .program-art__mask { position: absolute; top: 78.24%; bottom: 0; left: 0; right: 0; }
 .program-art .program-art__slogan { position: relative; top: auto; left: auto; right: auto; border: 0; text-transform: none; margin-top: -21.76%; min-height: 21.76cqw; padding: 5.5cqw 8.54cqw 4cqw; font-size: 4.375cqw; line-height: 1.2; font-weight: 900; color: var(--slogan-ink); background: var(--art-background); overflow-wrap: anywhere; }
+.program-art.program-art--custom .program-art__slogan { margin-top: 0; min-height: 0; }
 .program-number { margin: 0 0 12px; color: #b43c46; font-size: 32px; line-height: 1.2; font-weight: 900; }
 .mobile-program__description, .mobile-concept dd, .mobile-program__specs dd { white-space: normal; }
 .mobile-program__heading h2 { font-size: clamp(28px, 7.5vw, 34px); line-height: 1.12; font-weight: 900; letter-spacing: -.025em; margin: 0 0 24px; overflow-wrap: anywhere; }
@@ -82,7 +83,6 @@ body.public-catalog { background: #f7f7f4; }
 .mobile-about summary .about-title br { display: none; }
 .mobile-about summary .about-title strong { font-weight: inherit; }
 .mobile-about details[open] > summary > .about-title { transform: none; }
-.program-art--custom .program-art__number { background: #141414b3; padding: .1em; border-radius: 8px; }
 :root { scroll-behavior: auto; scroll-padding-top: 0; }
 .cover-label { display: none; }
 .mobile-index li a > span:last-child { min-width: 0; overflow-wrap: anywhere; }

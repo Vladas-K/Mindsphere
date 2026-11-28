@@ -10,6 +10,12 @@ class Event(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, blank=True, verbose_name='Слаг')
     slogan = models.CharField('Слоган', max_length=200, blank=True)
+    number_color = models.CharField(
+        'Цвет номера', max_length=5,
+        choices=(('white', 'Белый'), ('black', 'Чёрный')),
+        default='white', null=True, blank=True,
+        help_text='Выберите цвет, контрастный фону в верхнем левом углу изображения.',
+    )
     short_description = models.TextField('Краткое описание для клиентов', blank=True)
     description = models.TextField(verbose_name='Полное описание для сотрудников', blank=True)
     scenario = models.TextField('Сценарий', blank=True)
