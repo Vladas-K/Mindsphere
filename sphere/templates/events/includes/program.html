@@ -5,6 +5,7 @@
     {% if event.image %}
     <figure class="program-art{% if not program.original_art %} program-art--custom{% endif %}" style="--art-ink: {{ program.art_ink }}; --slogan-ink: {{ program.slogan_ink }}; --art-background: {{ program.art_background }}; --art-rule: {{ program.art_rule }}">
       <img src="{{ event.image.url }}" alt="Иллюстрация программы «{{ event.name }}»" loading="lazy" decoding="async">
+      {% if program.cassette_label %}<span class="program-art__cassette-label" aria-hidden="true">90</span>{% endif %}
       {% if program.number %}<span class="program-art__number">{{ program.number|stringformat:'02d' }}</span>{% endif %}
       {% if program.image_slogan_background %}<span class="program-art__mask" style="background: {{ program.image_slogan_background }}" aria-hidden="true"></span>{% endif %}
       {% if event.slogan.strip %}<figcaption class="program-art__slogan"{% if program.image_slogan_background %} style="background: {{ program.image_slogan_background }}"{% endif %}>{{ event.slogan }}</figcaption>{% endif %}

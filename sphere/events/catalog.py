@@ -73,5 +73,6 @@ def prepare_program(event, number, total):
         'art_rule': ART_RULES.get(page, '#b43c46'),
         'art_background': ART_BACKGROUNDS[page] if original_art else '#263546',
         'original_art': original_art,
+        'cassette_label': original_art and page == '6',
         'image_slogan_background': {'6': '#261d4b', '16': '#263546'}.get(page) if original_art else None,
     }

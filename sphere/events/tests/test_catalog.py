@@ -186,10 +186,12 @@ class PublicCatalogTests(TestCase):
                 row = next(row for row in catalog_source()['programs'] if row['catalog_page'] == page)
                 event = Event(catalog_page=page, image=row['image'])
                 self.assertIsNotNone(prepare_program(event, 1, 1)['image_slogan_background'])
+                self.assertEqual(prepare_program(event, 1, 1)['cassette_label'], page == 6)
                 event.image = 'events/replacement.png'
                 program = prepare_program(event, 1, 1)
                 self.assertIsNone(program['image_slogan_background'])
                 self.assertFalse(program['original_art'])
+                self.assertFalse(program['cassette_label'])
 
     def test_blank_public_features_do_not_leave_empty_sections(self):
         Event.objects.filter(pk=self.event.pk).update(
