@@ -49,15 +49,13 @@ venv/bin/python sphere/manage.py load_catalog --replace
 venv/bin/python -m pip check
 venv/bin/python sphere/manage.py check
 venv/bin/python sphere/manage.py makemigrations --check --dry-run
-venv/bin/python sphere/manage.py test events.tests users core.tests
+venv/bin/python -m pytest
 ```
 
-Полный набор, включая pytest-тесты, после установки зависимостей:
-
-```bash
-cd sphere
-../venv/bin/python -m pytest
-```
+Все тесты находятся в `sphere/tests/` и используют pytest с pytest-django.
+Общие фикстуры — в `sphere/tests/conftest.py`; проверки сгруппированы по
+`events`, `users` и `core`. Тестовая база и загружаемые изображения изолированы
+от рабочих данных. Для запуска одной группы: `venv/bin/python -m pytest sphere/tests/events`.
 
 ## Развёртывание
 
