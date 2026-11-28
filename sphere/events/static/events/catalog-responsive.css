@@ -23,6 +23,7 @@
 .mobile-concept summary { font-weight: 400; }
 .mobile-about summary::-webkit-details-marker, .mobile-concept summary::-webkit-details-marker { display: none; }
 .mobile-about summary > span, .mobile-concept summary > span { display: grid; place-items: center; flex: 0 0 28px; height: 28px; border-radius: 50%; background: #fff; font-size: 22px; font-weight: 400; color: #b43c46; transition: transform .18s ease; }
+.mobile-about summary > span > svg, .mobile-concept summary > span > svg { display: block; width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .mobile-about details[open] > summary > span, .mobile-concept[open] > summary > span { transform: rotate(45deg); }
 .mobile-about p { font-size: 16px; line-height: 1.65; margin: 0 0 20px; }
 .mobile-about h3 { font-size: 16px; font-weight: 700; color: #b43c46; margin: 24px 0 12px; }
@@ -209,7 +210,7 @@ body.public-catalog { background: #f7f7f4; }
   .mobile-about { padding: 17px 17px 0; }
   .mobile-about > details { padding: 0 13.6px; border-radius: 15.3px; }
   .mobile-about summary { min-height: 51px; font-size: 13.6px; gap: 13.6px; }
-  .mobile-about summary > span:last-child { flex-basis: 23.8px; height: 23.8px; font-size: 18.7px; }
+  .mobile-about summary > span:last-child { flex-basis: 22px; height: 22px; font-size: 16px; }
   .mobile-index { padding: 30.6px 17px 23.8px; }
   .mobile-index h2 { font-size: 25.5px; margin-bottom: 20.4px; }
   .mobile-index li a { min-height: 45.9px; padding: 10.2px 0; gap: 13.6px; font-size: 13.6px; }
@@ -221,7 +222,7 @@ body.public-catalog { background: #f7f7f4; }
   .mobile-program__slogan { font-size: 13.6px; margin-top: 13.6px; }
   .mobile-concept { padding: 0 13.6px; border-radius: 15.3px; margin-bottom: 20.4px; }
   .mobile-concept summary { min-height: 51px; gap: 13.6px; font-size: 13.6px; }
-  .mobile-concept summary > span { flex-basis: 23.8px; height: 23.8px; font-size: 18.7px; }
+  .mobile-concept summary > span { flex-basis: 22px; height: 22px; font-size: 16px; }
   .mobile-concept dl { padding-bottom: 6.8px; }
   .mobile-concept dl > div { margin-bottom: 18.7px; }
   .mobile-concept dt, .mobile-program__specs dt { font-size: 11.05px; margin-bottom: 5.1px; }
